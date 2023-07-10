@@ -6,24 +6,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 
 ## Topics covered in the course
 * Section 1 - Introduction to Microservices Architecture
-* Section 2 - Microservices & Spring Cloud (Match Made in Heaven)
-* Section 3 - How do we right size our Microservices & Identifying boundaries(Challenge 1)
-* Section 4 - Getting started with creation of accounts, loans & cards microservices
-* Section 5 - How do we build, deploy, scale our microservices using Docker (Challenge 2)
-* Section 6 - Introduction to Cloud Native Apps & 12factors
-* Section 7 - Configurations Management in Microservices (Challenge 3)
-* Section 8 - Service Discovery & Registration(Challenge 4)
-* Section 9 - Making Microservices Resilient (Challenge 5)
-* Section 10 - Handling Routing & Cross cutting concerns (Challenge 6)
-* Section 11 - Distributed tracing & Log aggregation (Challenge 7)
-* Section 12 - Monitoring Microservices Metrics & Health (Challenge 8)
-* Section 13 - Automatic self-heal, autoscale, deployments (Challenge 9)
-* Section 14 - Deploying all microservices into K8s cluster
-* Section 15 - Deep Dive on Helm
-* Section 16 - Securing Microservices using K8s Service
-* Section 17 - Securing Microservices using OAuth2 client credentials grant flow
-* Section 18 - Securing Microservices using OAuth2 Authorization code grant flow
-* Section 19 - Introduction to K8s Ingress & Service Mesh (Istio)
+* Section 2 - Crate accounts, loans & cards Microservices using Spring Boot
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
@@ -31,27 +14,13 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Interest to learn and explore about Microservices
 
 # Important Links
-- Spring Cloud Project - https://spring.io/projects/spring-cloud
-- Spring Cloud Config - https://spring.io/projects/spring-cloud-config
-- Spring Cloud Gateway - https://spring.io/projects/spring-cloud-gateway
-- Spring Cloud Netflix - https://spring.io/projects/spring-cloud-netflix
-- Spring Cloud Sleuth - https://spring.io/projects/spring-cloud-sleuth
-- The 12-factor App - https://12factor.net/
-- Docker - https://www.docker.com/
-- DockerHub - https://hub.docker.com/u/eazybytes
-- Cloud Native Buildpacks - https://buildpacks.io/
-- Resilience4j - https://resilience4j.readme.io/docs/getting-started
-- Zipkin - https://zipkin.io/
-- RabbitMQ - https://www.rabbitmq.com/
-- Micrometer - https://micrometer.io/
-- Prometheus - https://prometheus.io/
-- Grafana - https://grafana.com/
-- Kubernetes - https://kubernetes.io/
-- GCP - https://console.cloud.google.com/
-- GConsole -  https://cloud.google.com/sdk
-- Helm -  https://helm.sh/
-- Keycloak  -  https://www.keycloak.org/
-- Istio -  https://istio.io/
+- Spring Boot - https://spring.io/projects/spring-boot
+- Create SpringBoot project - https://start.spring.io
+- DTO pattern blog - https://martinfowler.com/eaaCatalog/dataTransferObject.html
+- Model Mapper - http://modelmapper.org/
+- Map Struct - https://mapstruct.org/
+- Spring Doc - https://springdoc.org/
+- Open API - https://www.openapis.org/
 
 ## Maven Commands used in the course
 
