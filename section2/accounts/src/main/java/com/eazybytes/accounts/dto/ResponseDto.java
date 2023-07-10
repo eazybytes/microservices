@@ -20,4 +20,5 @@ public class ResponseDto {
             description = "Status message in the response"
     )
     private String statusMsg;
+    
 }

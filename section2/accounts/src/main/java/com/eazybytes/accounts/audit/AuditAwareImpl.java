@@ -7,6 +7,7 @@ import java.util.Optional;
 
 @Component("auditAwareImpl")
 public class AuditAwareImpl implements AuditorAware<String> {
+
     /**
      * Returns the current auditor of the application.
      *
@@ -16,4 +17,5 @@ public class AuditAwareImpl implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
         return Optional.of("ACCOUNTS_MS");
     }
+	
 }
