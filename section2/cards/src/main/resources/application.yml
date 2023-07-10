@@ -14,5 +14,3 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
-springdoc:
-  show-actuator: true
