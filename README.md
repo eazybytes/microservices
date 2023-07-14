@@ -21,6 +21,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Map Struct - https://mapstruct.org/
 - Spring Doc - https://springdoc.org/
 - Open API - https://www.openapis.org/
+- Lucidchart Blog - https://www.lucidchart.com/blog/ddd-event-storming
 
 ## Maven Commands used in the course
 
