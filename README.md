@@ -1,4 +1,4 @@
-# Master Microservices with Java, Spring, Docker, Kubernetes
+![image](https://github.com/eazybytes/microservices/assets/79041235/80780075-79a2-4a76-9b27-d86f632ad869)# Master Microservices with Java, Spring, Docker, Kubernetes
 
 [![Image](https://udemy-image-web-upload.s3.amazonaws.com:443/redactor/raw/article_lecture/2022-08-02_02-27-57-b721336be301d3848be7ec92142e646c.png "Master Microservices with Java, Spring, Docker, Kubernetes")](https://www.udemy.com/course/master-microservices-with-spring-docker-kubernetes/?referralCode=9365DB9B7EE637F629A9)
 
@@ -6,7 +6,9 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 
 ## Topics covered in the course
 * Section 1 - Introduction to Microservices Architecture
-* Section 2 - Crate accounts, loans & cards Microservices using Spring Boot
+* Section 2 - Create accounts, loans & cards Microservices using Spring Boot
+* Section 3 - Right sizing the microservices & identify boundaries
+* Section 4 - Introduction to Docker and handle deployment, portability &  scalability of microservices using Docker containers
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
@@ -22,6 +24,10 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Spring Doc - https://springdoc.org/
 - Open API - https://www.openapis.org/
 - Lucidchart Blog - https://www.lucidchart.com/blog/ddd-event-storming
+- Docker website - https://www.docker.com
+- Docker hub website - https://hub.docker.com
+- Buildpacks website - https://buildpacks.io
+- Google Jib website - https://github.com/GoogleContainerTools/jib
 
 ## Maven Commands used in the course
 
@@ -30,13 +36,14 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "mvn clean install -Dmaven.test.skip=true" | To generate a jar inside target folder |
 | "mvn spring-boot:run" | To start a springboot maven project |
 | "mvn spring-boot:build-image -Dmaven.test.skip=true" | To generate a docker image using Buildpacks. No need of Dockerfile |
+| "mvn compile com.google.cloud.tools:jib-maven-plugin:3.3.2:dockerBuild" | To generate a docker image using Google Jib. No need of Dockerfile |
 
 ## Docker Commands used in the course
 
 |     Docker Command       |     Description          |
 | ------------- | ------------- |
 | "docker build . -t eazybytes/accounts" | To generate a docker image based on a Dockerfile |
-| "docker run  -p 8081:8080 eazybytes/accounts" | To start a docker container based on a given image |
+| "docker run  -p 8080:8080 eazybytes/accounts" | To start a docker container based on a given image |
 | "docker images" | To list all the docker images present in the Docker server |
 | "docker image inspect image-id" | To display detailed image information for a given image id |
 | "docker image rm image-id" | To remove one or more images for a given image ids |
