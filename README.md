@@ -8,7 +8,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 * Section 1 - Introduction to Microservices Architecture
 * Section 2 - Create accounts, loans & cards Microservices using Spring Boot
 * Section 3 - Right sizing the microservices & identify boundaries
-* Section 4 - Introduction to Docker and handle deployment, portability &  scalability of microservices using Docker containers
+* Section 4 - Handle deployment, portability &  scalability of microservices using Docker containers
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
