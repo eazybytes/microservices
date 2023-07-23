@@ -45,7 +45,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "mvn clean install -Dmaven.test.skip=true" | To generate a jar inside target folder |
 | "mvn spring-boot:run" | To start a springboot maven project |
 | "mvn spring-boot:build-image -Dmaven.test.skip=true" | To generate a docker image using Buildpacks. No need of Dockerfile |
-| "mvn compile jib:dockerBuild" | To generate a docker image using Google Jib. No need of Dockerfile |
+| "mvn compile jib:dockerBuild -Dmaven.test.skip=true" | To generate a docker image using Google Jib. No need of Dockerfile |
 
 ## Docker Commands used in the course
 
