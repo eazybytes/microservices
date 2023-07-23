@@ -9,6 +9,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 * Section 2 - Create accounts, loans & cards Microservices using Spring Boot
 * Section 3 - Right sizing the microservices & identify boundaries
 * Section 4 - Handle deployment, portability &  scalability of microservices using Docker containers
+* Section 5 - Introduction to Cloud Native Apps, 15-Factor methodology
+* Section 6 - Configurations Management in Microservices
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
@@ -28,6 +30,13 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Docker hub website - https://hub.docker.com
 - Buildpacks website - https://buildpacks.io
 - Google Jib website - https://github.com/GoogleContainerTools/jib
+- Twelve-Factor methodology - https://12factor.net
+- Beyond the Twelve-Factor App book - https://www.oreilly.com/library/view/beyond-the-twelve-factor/9781492042631/
+- Spring Cloud website - https://spring.io/projects/spring-cloud
+- Spring Cloud Config website - https://spring.io/projects/spring-cloud-config
+- Spring Cloud Bus website - https://spring.io/projects/spring-cloud-bus
+- RabbitMQ website - https://www.rabbitmq.com
+- Hookdeck website- https://hookdeck.com
 
 ## Maven Commands used in the course
 
@@ -36,19 +45,19 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "mvn clean install -Dmaven.test.skip=true" | To generate a jar inside target folder |
 | "mvn spring-boot:run" | To start a springboot maven project |
 | "mvn spring-boot:build-image -Dmaven.test.skip=true" | To generate a docker image using Buildpacks. No need of Dockerfile |
-| "mvn compile com.google.cloud.tools:jib-maven-plugin:3.3.2:dockerBuild" | To generate a docker image using Google Jib. No need of Dockerfile |
+| "mvn compile jib:dockerBuild" | To generate a docker image using Google Jib. No need of Dockerfile |
 
 ## Docker Commands used in the course
 
 |     Docker Command       |     Description          |
 | ------------- | ------------- |
-| "docker build . -t eazybytes/accounts" | To generate a docker image based on a Dockerfile |
-| "docker run  -p 8080:8080 eazybytes/accounts" | To start a docker container based on a given image |
+| "docker build . -t eazybytes/accounts:s4" | To generate a docker image based on a Dockerfile |
+| "docker run  -p 8080:8080 eazybytes/accounts:s4" | To start a docker container based on a given image |
 | "docker images" | To list all the docker images present in the Docker server |
 | "docker image inspect image-id" | To display detailed image information for a given image id |
 | "docker image rm image-id" | To remove one or more images for a given image ids |
-| "docker image push docker.io/eazybytes/accounts" | To push an image or a repository to a registry |
-| "docker image pull docker.io/eazybytes/accounts" | To pull an image or a repository from a registry |
+| "docker image push docker.io/eazybytes/accounts:s4" | To push an image or a repository to a registry |
+| "docker image pull docker.io/eazybytes/accounts:s4" | To pull an image or a repository from a registry |
 | "docker ps" | To show all running containers |
 | "docker ps -a" | To show all containers including running and stopped |
 | "docker container start container-id" | To start one or more stopped containers |
