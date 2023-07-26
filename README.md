@@ -72,7 +72,11 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "docker container rm container-id" | To remove one or more containers based on container ids |
 | "docker container prune" | To remove all stopped containers |
 | "docker compose up" | To create and start containers based on given docker compose file |
-| "docker compose stop" | To stop services |
+| "docker compose down" | To stop and remove containers |
+| "docker compose start" | To start containers based on given docker compose file |
+| "docker compose down" | To stop the running containers |
+| "docker run -p 3306:3306 --name accountsdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=accountsdb -d mysql" | To create a MySQL DB container |
+
 
 ## Kubernetes Commands used in the course
 
