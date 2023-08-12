@@ -11,6 +11,10 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 * Section 4 - Handle deployment, portability &  scalability of microservices using Docker containers
 * Section 5 - Introduction to Cloud Native Apps, 15-Factor methodology
 * Section 6 - Configurations Management in Microservices
+* Section 7 - Using MySQL DBs inside microservices
+* Section 8 - Service Discovery & Service Registration in microservices
+* Section 9 - Gateway, Routing & Cross cutting concerns in Microservices
+* Section 10 - Making Microservices Resilient
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
@@ -37,6 +41,10 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Spring Cloud Bus website - https://spring.io/projects/spring-cloud-bus
 - RabbitMQ website - https://www.rabbitmq.com
 - Hookdeck website- https://hookdeck.com
+- Resilience4j website - https://resilience4j.readme.io
+- Spring Cloud Gateway website - https://spring.io/projects/spring-cloud-gateway
+- Stripe RateLimitter pattern blog - https://stripe.com/blog/rate-limiters
+- Apache Benchmark website - https://httpd.apache.org
 
 ## Maven Commands used in the course
 
@@ -76,7 +84,13 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "docker compose start" | To start containers based on given docker compose file |
 | "docker compose down" | To stop the running containers |
 | "docker run -p 3306:3306 --name accountsdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=accountsdb -d mysql" | To create a MySQL DB container |
+| "docker run -p 6379:6379 --name eazyredis -d redis" | To create a Redis Container |
 
+## Apache Benchmark command used in the course
+
+|     Apache Benchmark command      |     Description          |
+| ------------- | ------------- |
+| "ab -n 10 -c 2 -v 3 http://localhost:8072/eazybank/cards/api/contact-info" | To perform load testing on API by sending 10 requests |
 
 ## Kubernetes Commands used in the course
 
