@@ -1,4 +1,4 @@
-# Master Microservices with Java, Spring, Docker, Kubernetes
+![image](https://github.com/eazybytes/microservices/assets/79041235/be524521-c3b3-4841-b8dd-365992e8d7e1)# Master Microservices with Java, Spring, Docker, Kubernetes
 
 [![Image](https://udemy-image-web-upload.s3.amazonaws.com:443/redactor/raw/article_lecture/2022-08-02_02-27-57-b721336be301d3848be7ec92142e646c.png "Master Microservices with Java, Spring, Docker, Kubernetes")](https://www.udemy.com/course/master-microservices-with-spring-docker-kubernetes/?referralCode=9365DB9B7EE637F629A9)
 
@@ -45,6 +45,14 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Spring Cloud Gateway website - https://spring.io/projects/spring-cloud-gateway
 - Stripe RateLimitter pattern blog - https://stripe.com/blog/rate-limiters
 - Apache Benchmark website - https://httpd.apache.org
+- Grafana website - https://grafana.com
+- Grafana Loki setup - https://grafana.com/docs/loki/latest/getting-started/
+- Micrometer website - https://micrometer.io
+- Prometheus website - https://prometheus.io/
+- Grafana Dashboards - https://grafana.com/grafana/dashboards/
+- OpenTelemetry website - https://opentelemetry.io/
+- OpenTelemetry automatic instrumentation - https://opentelemetry.io/docs/instrumentation/java/automatic/
+
 
 ## Maven Commands used in the course
 
