@@ -1,4 +1,4 @@
-![image](https://github.com/eazybytes/microservices/assets/79041235/be524521-c3b3-4841-b8dd-365992e8d7e1)# Master Microservices with Java, Spring, Docker, Kubernetes
+# Master Microservices with Java, Spring, Docker, Kubernetes
 
 [![Image](https://udemy-image-web-upload.s3.amazonaws.com:443/redactor/raw/article_lecture/2022-08-02_02-27-57-b721336be301d3848be7ec92142e646c.png "Master Microservices with Java, Spring, Docker, Kubernetes")](https://www.udemy.com/course/master-microservices-with-spring-docker-kubernetes/?referralCode=9365DB9B7EE637F629A9)
 
