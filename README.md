@@ -41,6 +41,9 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Spring Cloud Bus website - https://spring.io/projects/spring-cloud-bus
 - RabbitMQ website - https://www.rabbitmq.com
 - Hookdeck website- https://hookdeck.com
+- Spring Cloud Netflix website - https://spring.io/projects/spring-cloud-netflix
+- Spring Cloud OpenFeign - https://spring.io/projects/spring-cloud-openfeign
+- Netflix Blog - https://netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle-4855947713a0
 - Resilience4j website - https://resilience4j.readme.io
 - Spring Cloud Gateway website - https://spring.io/projects/spring-cloud-gateway
 - Stripe RateLimitter pattern blog - https://stripe.com/blog/rate-limiters
