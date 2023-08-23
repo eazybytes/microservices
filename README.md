@@ -56,6 +56,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Grafana Dashboards - https://grafana.com/grafana/dashboards/
 - OpenTelemetry website - https://opentelemetry.io/
 - OpenTelemetry automatic instrumentation - https://opentelemetry.io/docs/instrumentation/java/automatic/
+- Apache Kafka website - https://kafka.apache.org
+- Docker compose file for Kafka - https://github.com/bitnami/containers/blob/main/bitnami/kafka/docker-compose.yml
 
 
 ## Maven Commands used in the course
