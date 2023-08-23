@@ -15,6 +15,10 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 * Section 8 - Service Discovery & Service Registration in microservices
 * Section 9 - Gateway, Routing & Cross cutting concerns in Microservices
 * Section 10 - Making Microservices Resilient
+* Section 11 - Observability and monitoring of microservices
+* Section 12 - Microservices Security
+* Section 13 - Event Driven microservices using RabbitMQ,Spring Cloud Functions & Stream
+* Section 14 - Event Driven microservices using Kafka,Spring Cloud Functions & Stream
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
