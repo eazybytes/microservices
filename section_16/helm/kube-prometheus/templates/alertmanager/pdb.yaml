@@ -1,0 +1,25 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.alertmanager.enabled .Values.alertmanager.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "kube-prometheus.alertmanager.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
+  {{- if .Values.alertmanager.pdb.minAvailable }}
+  minAvailable: {{ .Values.alertmanager.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.alertmanager.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.alertmanager.pdb.maxUnavailable }}
+  {{- end }}
+{{- end }}
