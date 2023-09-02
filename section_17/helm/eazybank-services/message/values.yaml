@@ -1,0 +1,28 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: message-deployment
+serviceName: message
+appLabel: message
+appName: message
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/message
+  tag: s17
+
+containerPort: 9010
+
+service:
+  type: ClusterIP
+  port: 9010
+  targetPort: 9010
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+discovery_enabled: false
+resouceserver_enabled: false
+otel_enabled: false
+kafka_enabled: true

@@ -1,0 +1,10 @@
+global:
+  configMapName: eazybankqa-configmap
+  activeProfile: qa
+  configServerURL: configserver:http://configserver:8071/
+  discoveryServerURL: "http://spring-cloud-kubernetes-discoveryserver:80/"
+  keyCloakURL: http://keycloak.default.svc.cluster.local:80/realms/master/protocol/openid-connect/certs
+  openTelemetryJavaAgent: "-javaagent:/app/libs/opentelemetry-javaagent-1.27.0.jar"
+  otelExporterEndPoint: http://tempo-grafana-tempo-distributor:4317
+  otelMetricsExporter: none
+  kafkaBrokerURL: kafka-controller-0.kafka-controller-headless.default.svc.cluster.local:9092

@@ -1,0 +1,28 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+deploymentName: configserver-deployment
+serviceName: configserver
+appLabel: configserver
+appName: configserver
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/configserver
+  tag: s17
+
+containerPort: 8071
+
+service:
+  type: ClusterIP
+  port: 8071
+  targetPort: 8071
+
+appname_enabled: true
+profile_enabled: false
+config_enabled: false
+discovery_enabled: false
+resouceserver_enabled: false
+otel_enabled: true
+kafka_enabled: false
