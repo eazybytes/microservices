@@ -261,6 +261,7 @@ services:
       interval: 20s
       timeout: 5s
       retries: 20
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "loans"
       OTEL_SERVICE_NAME: "loans"
@@ -278,6 +279,7 @@ services:
       interval: 20s
       timeout: 5s
       retries: 20
+      start_period: 10s
     environment:
       SPRING_APPLICATION_NAME: "cards"
       OTEL_SERVICE_NAME: "cards"
