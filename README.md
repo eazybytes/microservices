@@ -60,6 +60,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Grafana Dashboards - https://grafana.com/grafana/dashboards/
 - OpenTelemetry website - https://opentelemetry.io/
 - OpenTelemetry automatic instrumentation - https://opentelemetry.io/docs/instrumentation/java/automatic/
+- Keycloak website - https://www.keycloak.org/
 - Apache Kafka website - https://kafka.apache.org
 - Docker compose file for Kafka - https://github.com/bitnami/containers/blob/main/bitnami/kafka/docker-compose.yml
 
@@ -103,6 +104,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "docker compose down" | To stop the running containers |
 | "docker run -p 3306:3306 --name accountsdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=accountsdb -d mysql" | To create a MySQL DB container |
 | "docker run -p 6379:6379 --name eazyredis -d redis" | To create a Redis Container |
+| "docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:22.0.3 start-dev" | To create Keycloak Container|
+
 
 ## Apache Benchmark command used in the course
 
