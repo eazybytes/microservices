@@ -63,6 +63,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Keycloak website - https://www.keycloak.org/
 - Apache Kafka website - https://kafka.apache.org
 - Docker compose file for Kafka - https://github.com/bitnami/containers/blob/main/bitnami/kafka/docker-compose.yml
+- Local Kubernetes Cluster with Docker Desktop - https://docs.docker.com/desktop/kubernetes/
 
 
 ## Maven Commands used in the course
