@@ -137,12 +137,10 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "kubectl get configmaps" | To get all the configmap details inside your cluster |
 | "kubectl get configmap configmap-id" | To get the details of a given configmap |
 | "kubectl get events --sort-by=.metadata.creationTimestamp" | To get all the events occured inside your cluster |
-| "kubectl scale deployment accounts-deployment --replicas=3" | To increase the number of replicas for a deployment inside your cluster |
-| "kubectl set image deployment accounts-deployment accounts=eazybytes/accounts:k8s" | To set a new image for a deployment inside your cluster |
-| "kubectl rollout history deployment accounts-deployment" | To know the rollout history for a deployment inside your cluster |
-| "kubectl rollout undo deployment accounts-deployment --to-revision=1" | To rollback to a given revision for a deployment inside your cluster |
-| "kubectl autoscale deployment accounts-deployment --min=3 --max=10 --cpu-percent=70" | To create automatic scaling using HPA for a deployment inside your cluster |
-| "kubectl logs node-id" | To get a logs of a given node inside your cluster |
+| "kubectl scale deployment accounts-deployment --replicas=1" | To set the number of replicas for a deployment inside your cluster |
+| "kubectl set image deployment gatewayserver-deployment gatewayserver=eazybytes/gatewayserver:s11 --record" | To set a new image for a deployment inside your cluster |
+| "kubectl rollout history deployment gatewayserver-deployment" | To know the rollout history for a deployment inside your cluster |
+| "kubectl rollout undo deployment gatewayserver-deployment --to-revision=1" | To rollback to a given revision for a deployment inside your cluster |
 
 ## Helm Commands used in the course
 
