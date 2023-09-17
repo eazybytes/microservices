@@ -144,6 +144,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "kubectl set image deployment gatewayserver-deployment gatewayserver=eazybytes/gatewayserver:s11 --record" | To set a new image for a deployment inside your cluster |
 | "kubectl rollout history deployment gatewayserver-deployment" | To know the rollout history for a deployment inside your cluster |
 | "kubectl rollout undo deployment gatewayserver-deployment --to-revision=1" | To rollback to a given revision for a deployment inside your cluster |
+| "kubectl get pvc" | To list the pvcs inside your cluster |
+| "kubectl delete pvc data-happy-panda-mariadb-0" | To delete a pvc inside your cluster |
 
 ## Helm Commands used in the course
 
