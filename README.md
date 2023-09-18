@@ -68,6 +68,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Helm website - https://helm.sh
 - Chocolatey website - https://chocolatey.org/
 - Bitnami Helm charts GitHub repo - https://github.com/bitnami/charts
+- Spring Cloud Kubernetes website - https://spring.io/projects/spring-cloud-kubernetes
+- Spring Cloud Kubernetes Blog - https://spring.io/blog/2021/10/26/new-features-for-spring-cloud-kubernetes-in-spring-cloud-2021-0-0-m3
 
 
 ## Maven Commands used in the course
