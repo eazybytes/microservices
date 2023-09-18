@@ -70,6 +70,11 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Bitnami Helm charts GitHub repo - https://github.com/bitnami/charts
 - Spring Cloud Kubernetes website - https://spring.io/projects/spring-cloud-kubernetes
 - Spring Cloud Kubernetes Blog - https://spring.io/blog/2021/10/26/new-features-for-spring-cloud-kubernetes-in-spring-cloud-2021-0-0-m3
+- GCP website - https://cloud.google.com
+- GCP SDK installation - https://cloud.google.com/sdk/docs/install
+- Kubernetes Ingress - https://kubernetes.io/docs/concepts/services-networking/ingress/
+- Ingress Controllers - https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
+- Istio (Service mesh) - https://istio.io
 
 
 ## Maven Commands used in the course
