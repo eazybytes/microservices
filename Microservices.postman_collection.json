@@ -71,7 +71,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Madan Mohan\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\",\n    \"accountsDto\": {\n        \"accountNumber\": 1151114538,\n        \"accountType\": \"Savings\",\n        \"branchAddress\": \"124 Main Street, New York\"\n    }\n}",
+							"raw": "{\n    \"name\": \"Madan Mohan\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\",\n    \"accountsDto\": {\n        \"accountNumber\": 1105557729,\n        \"accountType\": \"Savings\",\n        \"branchAddress\": \"123 Main Street, New York\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -125,7 +125,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/accounts/build-info",
+							"raw": "http://localhost:8080/api/build-info",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -133,7 +133,6 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"accounts",
 								"build-info"
 							]
 						}
@@ -178,7 +177,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/accounts/contact-info",
+							"raw": "http://localhost:8080/api/contact-info",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -186,7 +185,6 @@
 							"port": "8080",
 							"path": [
 								"api",
-								"accounts",
 								"contact-info"
 							]
 						}
@@ -266,7 +264,13 @@
 					"name": "FetchCustomerDetails",
 					"request": {
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "eazybank-correlation-id",
+								"value": "43gtrt-trtrrtgf",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:8080/api/fetchCustomerDetails?mobileNumber=4354437687",
 							"protocol": "http",
@@ -352,7 +356,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mobileNumber\": \"4354437687\",\n    \"cardNumber\": \"100064038958\",\n    \"cardType\": \"Credit Card\",\n    \"totalLimit\": 100000,\n    \"amountUsed\": 10000,\n    \"availableAmount\": 90000\n}",
+							"raw": "{\n    \"mobileNumber\": \"4354437687\",\n    \"cardNumber\": \"100107091026\",\n    \"cardType\": \"Debit Card\",\n    \"totalLimit\": 100000,\n    \"amountUsed\": 10000,\n    \"availableAmount\": 90000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -406,7 +410,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9000/api/cards/build-info",
+							"raw": "http://localhost:9000/api/build-info",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -414,7 +418,6 @@
 							"port": "9000",
 							"path": [
 								"api",
-								"cards",
 								"build-info"
 							]
 						}
@@ -427,7 +430,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9000/api/cards/java-version",
+							"raw": "http://localhost:9000/api/java-version",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -435,7 +438,6 @@
 							"port": "9000",
 							"path": [
 								"api",
-								"cards",
 								"java-version"
 							]
 						}
@@ -448,7 +450,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:9000/api/cards/contact-info",
+							"raw": "http://localhost:9000/api/contact-info",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -456,7 +458,6 @@
 							"port": "9000",
 							"path": [
 								"api",
-								"cards",
 								"contact-info"
 							]
 						}
@@ -576,7 +577,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"mobileNumber\": \"4354437687\",\n    \"loanNumber\": \"100646930341\",\n    \"loanType\": \"Home Loan\",\n    \"totalLoan\": 100000,\n    \"amountPaid\": 10000,\n    \"outstandingAmount\": 90000\n}",
+							"raw": "{\n    \"mobileNumber\": \"4354437687\",\n    \"loanNumber\": \"10071469799154\",\n    \"loanType\": \"Vehicle Loan\",\n    \"totalLoan\": -100000,\n    \"amountPaid\": -10000,\n    \"outstandingAmount\": -90000\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -630,7 +631,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8090/api/loans/build-info",
+							"raw": "http://localhost:8090/api/build-info",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -638,7 +639,6 @@
 							"port": "8090",
 							"path": [
 								"api",
-								"loans",
 								"build-info"
 							]
 						}
@@ -651,7 +651,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8090/api/loans/java-version",
+							"raw": "http://localhost:8090/api/java-version",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -659,7 +659,6 @@
 							"port": "8090",
 							"path": [
 								"api",
-								"loans",
 								"java-version"
 							]
 						}
@@ -672,7 +671,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8090/api/loans/contact-info",
+							"raw": "http://localhost:8090/api/contact-info",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -680,7 +679,6 @@
 							"port": "8090",
 							"path": [
 								"api",
-								"loans",
 								"contact-info"
 							]
 						}
@@ -748,7 +746,12 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "aishwarya@eazybank.com"
+							"raw": "aishwarya@eazybank.com",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
 						},
 						"url": {
 							"raw": "http://localhost:8071/encrypt",
@@ -759,6 +762,29 @@
 							"port": "8071",
 							"path": [
 								"encrypt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "decrypt",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "f83ac5a34ba5f4657ae8e863c063c1b69efb4d23d0c431eb134f8d1b3ed0823dee0a4b627d091455b4c6600353a3682c"
+						},
+						"url": {
+							"raw": "http://localhost:8071/decrypt",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8071",
+							"path": [
+								"decrypt"
 							]
 						}
 					},
@@ -786,7 +812,7 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8070/eureka/apps/",
+							"raw": "http://localhost:8070/eureka/apps/cards",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -795,7 +821,7 @@
 							"path": [
 								"eureka",
 								"apps",
-								""
+								"cards"
 							]
 						}
 					},
@@ -807,7 +833,7 @@
 			"name": "gatewayserver",
 			"item": [
 				{
-					"name": "eazybank/accounts/api/create",
+					"name": "gatewayserver_1",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -823,7 +849,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes.com\",\n    \"mobileNumber\": \"1234567895\"\n}",
+							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes.com\",\n    \"mobileNumber\": \"4354437687\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -831,13 +857,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/create",
+							"raw": "http://localhost:8072/accounts/api/create",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8072",
 							"path": [
+								"accounts",
 								"api",
 								"create"
 							]
@@ -846,22 +873,21 @@
 					"response": []
 				},
 				{
-					"name": "eazybank/accounts/api/fetchCustomerDetails",
+					"name": "gatewayserver_2",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8072/eazybank/accounts/api/fetchCustomerDetails?mobileNumber=4354437687",
+							"raw": "http://localhost:8072/accounts/api/fetch?mobileNumber=4354437687",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8072",
 							"path": [
-								"eazybank",
 								"accounts",
 								"api",
-								"fetchCustomerDetails"
+								"fetch"
 							],
 							"query": [
 								{
@@ -874,10 +900,119 @@
 					"response": []
 				},
 				{
+					"name": "gatewayserver_3",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJ1YkQ5OHloaFJiZmtTMmZzT1hRdWxVUUxYMHc1eUtudWNWZFo1VjY2d2VFIn0.eyJleHAiOjE2ODgzMDQyODAsImlhdCI6MTY4ODMwNDIyMCwiYXV0aF90aW1lIjoxNjg4MzAyODM3LCJqdGkiOiI5MDNlMjIxMy0yMjA0LTQwNTUtODE5ZS0wZmQxNWMzM2IwZDMiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjcwODAvcmVhbG1zL21hc3RlciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiI4Y2U2YjVlNy0xYzlmLTRkYzEtYTVhNy0xODA0ZTNlZTc4MWEiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJlYXp5YmFuay1nYXRld2F5Iiwic2Vzc2lvbl9zdGF0ZSI6IjRiY2I0ZTg3LTRlYTUtNGZiMS05ODI0LThiMzYxZTAxZWFiNSIsImFjciI6IjAiLCJhbGxvd2VkLW9yaWdpbnMiOlsiKiJdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsiTE9BTlMiLCJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIkFDQ09VTlRTIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiIsIkNBUkRTIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgZW1haWwgcHJvZmlsZSIsInNpZCI6IjRiY2I0ZTg3LTRlYTUtNGZiMS05ODI0LThiMzYxZTAxZWFiNSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJuYW1lIjoiU2FhbnZpIFJlZGR5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoic2FhbnZpIiwiZ2l2ZW5fbmFtZSI6IlNhYW52aSIsImZhbWlseV9uYW1lIjoiUmVkZHkiLCJlbWFpbCI6InNhYW52aUBnbWFpbC5jb20ifQ.JWa4_j4CkMfzOOWQ9Zfmf983wwVR1-giJ8b3bEH2prfCUY2RSzlgwUiEAtbjcsAouhixlfddYk6ZOT1z-kbJOKCRdsvEGSLuJiZeZmG2kdy4vf61alkRYnTpAW9FBThfm9egV6zGUVdK5JEdXLIPTsKKNnMjZ7cDPPZKlbkfTbgL9ePfMZq2NTF_C6piNUUxDmEhmDZ3z68UdrPmentaktO8vV2GJiGE4dAa87_Zw8UzvDmU2voyx5JlE0MBFhLWn-11s9HVxXt9bo0DX54LtjiS3YsFvD-SwIuPLlGndpX4HogMtKufv9n9Z_SD2-FzjouOBhPJ1nsVj_1vaSc2ug",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes.com\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "gatewayserver_4",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/fetch?mobileNumber=4354437688",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"fetch"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437688"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eazybank/accounts/api/create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "eazybank/cards/api/create",
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "http://localhost:8072/eazybank/cards/api/create?mobileNumber=4354437687",
 							"protocol": "http",
@@ -930,16 +1065,104 @@
 					"response": []
 				},
 				{
-					"name": "contact-info Copy",
+					"name": "FetchCustomerDetails",
 					"request": {
 						"method": "GET",
-						"header": [
-							{
-								"key": "user",
-								"value": "madan",
-								"type": "text"
-							}
-						],
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/fetchCustomerDetails?mobileNumber=4354437687",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"fetchCustomerDetails"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437687"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eazybank/accounts/api/contact-info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/contact-info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"contact-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eazybank/loans/api/contact-info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/loans/api/contact-info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"loans",
+								"api",
+								"contact-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eazybank/accounts/api/build-info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/build-info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"build-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eazybank/accounts/api/java-version",
+					"request": {
+						"method": "GET",
+						"header": [],
 						"url": {
 							"raw": "http://localhost:8072/eazybank/accounts/api/java-version",
 							"protocol": "http",
@@ -963,52 +1186,7 @@
 			"name": "KeyCloak",
 			"item": [
 				{
-					"name": "GetAuthCode",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:7080/realms/master/protocol/openid-connect/auth?response_type=code&scope=openid email profile&redirect_uri=http://localhost:8081/sample&client_id=eazybank-gateway&state=sdkjhjhgsdsdsdds",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "7080",
-							"path": [
-								"realms",
-								"master",
-								"protocol",
-								"openid-connect",
-								"auth"
-							],
-							"query": [
-								{
-									"key": "response_type",
-									"value": "code"
-								},
-								{
-									"key": "scope",
-									"value": "openid email profile"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "http://localhost:8081/sample"
-								},
-								{
-									"key": "client_id",
-									"value": "eazybank-gateway"
-								},
-								{
-									"key": "state",
-									"value": "sdkjhjhgsdsdsdds"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Access Token",
+					"name": "ClientCredentials_AccessToken",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -1017,27 +1195,17 @@
 							"urlencoded": [
 								{
 									"key": "grant_type",
-									"value": "authorization_code",
+									"value": "client_credentials",
 									"type": "text"
 								},
 								{
 									"key": "client_id",
-									"value": "eazybank-gateway",
+									"value": "eazybank-callcenter-cc",
 									"type": "text"
 								},
 								{
 									"key": "client_secret",
-									"value": "Ggj70bere0IuBdBjCupRs8yiqg94Zlrg",
-									"type": "text"
-								},
-								{
-									"key": "code",
-									"value": "e14af028-ff41-4d35-b69e-6f7505a1d9a5.4bcb4e87-4ea5-4fb1-9824-8b361e01eab5.5a87a574-a40a-45aa-aded-382ad4454acf",
-									"type": "text"
-								},
-								{
-									"key": "redirect_uri",
-									"value": "http://localhost:8081/sample",
+									"value": "qM8R47968MVVCWVgRiNyYlfvWDYCeyFQ",
 									"type": "text"
 								},
 								{
@@ -1060,6 +1228,762 @@
 								"protocol",
 								"openid-connect",
 								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "gatewayserver_security",
+			"item": [
+				{
+					"name": "Accounts_GET_PermitAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/contact-info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"contact-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cards_GET_PermitAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/cards/api/java-version",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"cards",
+								"api",
+								"java-version"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Loans_GET_PermitAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/loans/api/build-info",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"loans",
+								"api",
+								"build-info"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts_POST_NoAuth",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts_POST_ClientCredentials",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "wnE8jucNDQRnOcaphC7LNZDK8vHmZHuB",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "clientcredentails_accesstoken",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "eazybank-callcenter-cc",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "openid email profile",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437688\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CARDS_POST_ClientCredentials",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "wnE8jucNDQRnOcaphC7LNZDK8vHmZHuB",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "clientcredentails_accesstoken",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "eazybank-callcenter-cc",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "openid email profile",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/cards/api/create?mobileNumber=4354437688",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"cards",
+								"api",
+								"create"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437688"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOANS_POST_ClientCredentials",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "clientSecret",
+									"value": "wnE8jucNDQRnOcaphC7LNZDK8vHmZHuB",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "eazybank-callcenter-cc",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "clientcredentails_accesstoken",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "openid email profile",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/loans/api/create?mobileNumber=4354437688",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"loans",
+								"api",
+								"create"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437688"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts_POST_AuthCode",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "clientSecret",
+									"value": "w0mzY8TPy9ngQcDA4vtu7vZXS1jQWaE2",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "eazybank-callcenter-ac",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJia0J6dXNaMzU0WklNb3hlWjZNcnF3Wnh2ek51QXlZcjJfU29jRFFwMmJRIn0.eyJleHAiOjE2OTIyNzA4MjYsImlhdCI6MTY5MjI3MDc2NiwiYXV0aF90aW1lIjoxNjkyMjcwNjg5LCJqdGkiOiJjYzA2ZDdlZS02MzE1LTQxOTgtYTE2ZS0zMzlmYmRhNjdmODUiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjcwODAvcmVhbG1zL21hc3RlciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJmYTAxMjdhMi04ODdkLTQ0MzctYmNjZS00MDU2ZmVmMWEwNjgiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJlYXp5YmFuay1jYWxsY2VudGVyLWNsaWVudDIiLCJzZXNzaW9uX3N0YXRlIjoiMWE3NmYwMDMtZTJmMC00OTM4LTkzZjMtYTFhZjZiMjM3ZGM5IiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJkZWZhdWx0LXJvbGVzLW1hc3RlciIsIkFDQ09VTlRTIiwib2ZmbGluZV9hY2Nlc3MiLCJ1bWFfYXV0aG9yaXphdGlvbiJdfSwicmVzb3VyY2VfYWNjZXNzIjp7ImFjY291bnQiOnsicm9sZXMiOlsibWFuYWdlLWFjY291bnQiLCJtYW5hZ2UtYWNjb3VudC1saW5rcyIsInZpZXctcHJvZmlsZSJdfX0sInNjb3BlIjoib3BlbmlkIGVtYWlsIHByb2ZpbGUiLCJzaWQiOiIxYTc2ZjAwMy1lMmYwLTQ5MzgtOTNmMy1hMWFmNmIyMzdkYzkiLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwibmFtZSI6Ik1hZGFuIFJlZGR5IiwicHJlZmVycmVkX3VzZXJuYW1lIjoibWFkYW4iLCJnaXZlbl9uYW1lIjoiTWFkYW4iLCJmYW1pbHlfbmFtZSI6IlJlZGR5IiwiZW1haWwiOiJ0dXRvckBlYXp5Ynl0ZXMuY29tIn0.ojk3ZdM7vrbh_vs-RftN7l2515DaKq2ixJcab6d1Y5H00-DfzTiOI3PYOrPQOKx05Ksl9J7UdMVE8eEBVQ5jshwPIto2uNOIF0U_OBOQrnZz3cAlUl2BfsCT78WwuevbVFi-E9b3yYqOtlmjXkFMTKOLXmPjNsIWiOShEL0zYKKCa_bpHktFTGCweARDZ4r1QuMB7JfxcP-t-36Nm2q1chBagyatHtN--v02bK4jprwLVOkLoFomBmlRQ8bqxMRwyG85FOG0jan0JUFIcbnnX7ItAxKjPcNXQI6o9HZ1egrJbxo8uTp_M8K1vUcxYXcxgexVzQqAr-H9zgdmI8pcuw",
+									"type": "string"
+								},
+								{
+									"key": "state",
+									"value": "ew34er-344fgfg-5gfgfg",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "authcode_accesstoken",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "openid email profile",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CARDS_POST_AuthCode",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "clientSecret",
+									"value": "6AXs2apKOCVj3Q1d1QGTXOIUk1rylAqP",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "eazybank-callcenter-ac",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "authcode_accesstoken",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "accessToken",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJia0J6dXNaMzU0WklNb3hlWjZNcnF3Wnh2ek51QXlZcjJfU29jRFFwMmJRIn0.eyJleHAiOjE2OTIyNzEyMjksImlhdCI6MTY5MjI3MTE2OSwiYXV0aF90aW1lIjoxNjkyMjcwNjg5LCJqdGkiOiIxYjVhN2ExYi02MmE5LTQ5Y2ItOWFjNy1jYTY1NjIxNWQwYzYiLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjcwODAvcmVhbG1zL21hc3RlciIsImF1ZCI6ImFjY291bnQiLCJzdWIiOiJmYTAxMjdhMi04ODdkLTQ0MzctYmNjZS00MDU2ZmVmMWEwNjgiLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJlYXp5YmFuay1jYWxsY2VudGVyLWNsaWVudDIiLCJzZXNzaW9uX3N0YXRlIjoiMWE3NmYwMDMtZTJmMC00OTM4LTkzZjMtYTFhZjZiMjM3ZGM5IiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJMT0FOUyIsImRlZmF1bHQtcm9sZXMtbWFzdGVyIiwiQUNDT1VOVFMiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIiwiQ0FSRFMiXX0sInJlc291cmNlX2FjY2VzcyI6eyJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6Im9wZW5pZCBlbWFpbCBwcm9maWxlIiwic2lkIjoiMWE3NmYwMDMtZTJmMC00OTM4LTkzZjMtYTFhZjZiMjM3ZGM5IiwiZW1haWxfdmVyaWZpZWQiOnRydWUsIm5hbWUiOiJNYWRhbiBSZWRkeSIsInByZWZlcnJlZF91c2VybmFtZSI6Im1hZGFuIiwiZ2l2ZW5fbmFtZSI6Ik1hZGFuIiwiZmFtaWx5X25hbWUiOiJSZWRkeSIsImVtYWlsIjoidHV0b3JAZWF6eWJ5dGVzLmNvbSJ9.BSc8H2dgEtZJmIwvO-_r9JOHFXPKGZmZG3sM01nIH3jRlqIAToHGcUdlLcP_30z-zFAUceBhNcc08_Cd6y9Gg0ftdzrQj_nXe4MMuVVmk0l36D-sRrpSEcwjr-4qOw4o8Fxm7lQ7XoDk2i6KAUGhwQgqnnk46LIXvt5PxgJ9bxN3Ex2uzzDcvRc89SD7z5sfgCGpdCk3j-DMd04p_ZB0ftTyEChTQsJC87MKyNGNa4Q_Z0oLGFTVcvppGBXB5QJRUInIx2Y7XR1woUxHSAOO0CNShcGue63V0Z47fX_zvl3aVw9c8L1mQ229d98PwDh2EID9c9wAcewi2OE9YKxnEg",
+									"type": "string"
+								},
+								{
+									"key": "state",
+									"value": "ew34er-344fgfg-5gfgfg",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "openid email profile",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8072/eazybank/cards/api/create?mobileNumber=4354437687",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"cards",
+								"api",
+								"create"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437687"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LOANS_POST_AuthCode",
+					"request": {
+						"auth": {
+							"type": "oauth2",
+							"oauth2": [
+								{
+									"key": "clientSecret",
+									"value": "6AXs2apKOCVj3Q1d1QGTXOIUk1rylAqP",
+									"type": "string"
+								},
+								{
+									"key": "clientId",
+									"value": "eazybank-callcenter-ac",
+									"type": "string"
+								},
+								{
+									"key": "tokenName",
+									"value": "authcode_accesstoken",
+									"type": "string"
+								},
+								{
+									"key": "scope",
+									"value": "openid email profile",
+									"type": "string"
+								},
+								{
+									"key": "authUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/auth",
+									"type": "string"
+								},
+								{
+									"key": "tokenType",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "accessToken",
+									"value": "",
+									"type": "string"
+								},
+								{
+									"key": "grant_type",
+									"value": "authorization_code",
+									"type": "string"
+								},
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "client_authentication",
+									"value": "body",
+									"type": "string"
+								},
+								{
+									"key": "accessTokenUrl",
+									"value": "http://localhost:7080/realms/master/protocol/openid-connect/token",
+									"type": "string"
+								},
+								{
+									"key": "state",
+									"value": "ew34er-344fgfg-5gfgfg",
+									"type": "string"
+								},
+								{
+									"key": "useBrowser",
+									"value": true,
+									"type": "boolean"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/loans/api/create?mobileNumber=4354437687",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"loans",
+								"api",
+								"create"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437687"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accounts_GET_PermitAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8072/eazybank/accounts/api/fetchCustomerDetails?mobileNumber=4354437688",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8072",
+							"path": [
+								"eazybank",
+								"accounts",
+								"api",
+								"fetchCustomerDetails"
+							],
+							"query": [
+								{
+									"key": "mobileNumber",
+									"value": "4354437688"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "message",
+			"item": [
+				{
+					"name": "email",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": 1234545454,\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9010/email",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9010",
+							"path": [
+								"email"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "sms",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": 1234545454,\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9010/sms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9010",
+							"path": [
+								"sms"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "emailsms",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"accountNumber\": 1234545454,\n    \"name\": \"Madan Reddy\",\n    \"email\": \"tutor@eazybytes\",\n    \"mobileNumber\": \"4354437687\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:9010/emailsms",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "9010",
+							"path": [
+								"emailsms"
 							]
 						}
 					},
