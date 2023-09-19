@@ -6,10 +6,10 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 
 ## Topics covered in the course
 * Section 1 - Introduction to Microservices Architecture
-* Section 2 - Create accounts, loans & cards Microservices using Spring Boot
-* Section 3 - Right sizing the microservices & identify boundaries
-* Section 4 - Handle deployment, portability &  scalability of microservices using Docker containers
-* Section 5 - Introduction to Cloud Native Apps, 15-Factor methodology
+* Section 2- Building microservices using Spring Boot
+* Section 3 - How do we right size our microservices & identify boundaries
+* Section 4 - Handle deployment, portability &  scalability of microservices using Docker
+* Section 5 - Deep Dive on Cloud Native Apps & 15-Factor methodology
 * Section 6 - Configurations Management in Microservices
 * Section 7 - Using MySQL DBs inside microservices
 * Section 8 - Service Discovery & Service Registration in microservices
@@ -19,6 +19,12 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 * Section 12 - Microservices Security
 * Section 13 - Event Driven microservices using RabbitMQ,Spring Cloud Functions & Stream
 * Section 14 - Event Driven microservices using Kafka,Spring Cloud Functions & Stream
+* Section 15 - Container Orchestration using Kubernetes
+* Section 16 - Deep dive on Helm
+* Section 17 - Server-side service discovery and load balancing using Kubernetes
+* Section 18 - Deploying microservices into cloud K8s cluster
+* Section 19 - Introduction to K8s Ingress, Service Mesh (Istio) & mTLS
+* Section 20 - Congratulations & Thank You
 
 ## Pre-requisite for the course
 - Good understanding on Java and Spring concepts
@@ -83,8 +89,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | ------------- | ------------- |
 | "mvn clean install -Dmaven.test.skip=true" | To generate a jar inside target folder |
 | "mvn spring-boot:run" | To start a springboot maven project |
-| "mvn spring-boot:build-image -Dmaven.test.skip=true" | To generate a docker image using Buildpacks. No need of Dockerfile |
-| "mvn compile jib:dockerBuild -Dmaven.test.skip=true" | To generate a docker image using Google Jib. No need of Dockerfile |
+| "mvn spring-boot:build-image" | To generate a docker image using Buildpacks. No need of Dockerfile |
+| "mvn compile jib:dockerBuild" | To generate a docker image using Google Jib. No need of Dockerfile |
 
 ## Docker Commands used in the course
 
