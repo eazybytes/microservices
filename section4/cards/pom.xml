@@ -16,7 +16,7 @@
 	<name>cards</name>
 	<description>Microservice for Cards</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -65,9 +65,6 @@
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>3.4.0</version>
 				<configuration>
-					<from>
-						<image>openjdk:21-jdk-slim</image>
-					</from>
 					<to>
 						<image>eazybytes/${project.artifactId}:s4</image>
 					</to>
