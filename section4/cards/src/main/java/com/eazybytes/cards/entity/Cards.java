@@ -1,6 +1,9 @@
 package com.eazybytes.cards.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import lombok.*;
 
 @Entity
@@ -11,20 +14,20 @@ import lombok.*;
 @NoArgsConstructor
 public class Cards extends BaseEntity {
 
-	@Id
-	@GeneratedValue
-	private Long cardId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long cardId;
 
-	private String mobileNumber;
+    private String mobileNumber;
 
-	private String cardNumber;
+    private String cardNumber;
 
-	private String cardType;
+    private String cardType;
 
-	private int totalLimit;
+    private int totalLimit;
 
-	private int amountUsed;
+    private int amountUsed;
 
-	private int availableAmount;
-	
+    private int availableAmount;
+
 }
