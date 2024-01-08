@@ -8,7 +8,7 @@ import lombok.*;
 public class Customer extends  BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="customer_id")
     private Long customerId;
 

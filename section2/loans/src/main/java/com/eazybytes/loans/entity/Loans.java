@@ -8,7 +8,7 @@ import lombok.*;
 public class Loans extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long loanId;
 
 	private String mobileNumber;

@@ -12,7 +12,7 @@ import lombok.*;
 public class Cards extends BaseEntity {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cardId;
 
 	private String mobileNumber;
