@@ -1,7 +1,7 @@
 services:
 
   kafka:
-    image: docker.io/bitnami/kafka:3.5
+    image: docker.io/bitnami/kafka:3.6
     ports:
       - "9092:9092"
     volumes:
@@ -35,7 +35,7 @@ services:
       service: network-deploy-service
 
   read:
-    image: grafana/loki:2.8.3
+    image: grafana/loki:2.9.2
     command: "-config.file=/etc/loki/config.yaml -target=read"
     ports:
       - 3101:3100
@@ -56,7 +56,7 @@ services:
           - loki
 
   write:
-    image: grafana/loki:2.8.3
+    image: grafana/loki:2.9.2
     command: "-config.file=/etc/loki/config.yaml -target=write"
     ports:
       - 3102:3100
@@ -75,7 +75,7 @@ services:
       <<: *loki-dns
 
   promtail:
-    image: grafana/promtail:2.8.3
+    image: grafana/promtail:2.9.2
     volumes:
       - ../observability/promtail/promtail-local-config.yaml:/etc/promtail/config.yaml:ro
       - /var/run/docker.sock:/var/run/docker.sock
@@ -114,7 +114,7 @@ services:
       service: network-deploy-service
 
   prometheus:
-    image: prom/prometheus:v2.45.0
+    image: prom/prometheus:v2.48.0
     container_name: prometheus
     ports:
       - "9090:9090"
