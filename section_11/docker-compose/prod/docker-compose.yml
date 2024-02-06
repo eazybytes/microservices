@@ -226,6 +226,9 @@ services:
       timeout: 5s
       retries: 20
       start_period: 10s
+    depends_on:
+      configserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-configserver-config
@@ -247,6 +250,9 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "accounts"
       OTEL_SERVICE_NAME: "accounts"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-eureka-config
@@ -265,6 +271,9 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "loans"
       OTEL_SERVICE_NAME: "loans"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-eureka-config
@@ -283,6 +292,9 @@ services:
     environment:
       SPRING_APPLICATION_NAME: "cards"
       OTEL_SERVICE_NAME: "cards"
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-eureka-config
