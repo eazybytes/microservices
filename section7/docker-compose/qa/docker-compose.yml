@@ -55,6 +55,8 @@ services:
     depends_on:
       accountsdb:
         condition: service_healthy
+      configserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-configserver-config
@@ -70,6 +72,8 @@ services:
     depends_on:
       loansdb:
         condition: service_healthy
+      configserver:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-configserver-config
@@ -84,6 +88,8 @@ services:
       SPRING_DATASOURCE_URL: "jdbc:mysql://cardsdb:3306/cardsdb"
     depends_on:
       cardsdb:
+        condition: service_healthy
+      configserver:
         condition: service_healthy
     extends:
       file: common-config.yml
