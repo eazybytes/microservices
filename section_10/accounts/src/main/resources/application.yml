@@ -81,7 +81,7 @@ resilience4j.circuitbreaker:
 resilience4j.retry:
   configs:
     default:
-      maxRetryAttempts: 3
+      maxAttempts: 3
       waitDuration: 500
       enableExponentialBackoff: true
       exponentialBackoffMultiplier: 2
