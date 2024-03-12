@@ -1,6 +1,6 @@
 services:
   rabbit:
-    image: rabbitmq:3.12-management
+    image: rabbitmq:3.13-management
     hostname: rabbitmq
     ports:
       - "5672:5672"
@@ -16,7 +16,7 @@ services:
       service: network-deploy-service
 
   keycloak:
-    image: quay.io/keycloak/keycloak:22.0.1
+    image: quay.io/keycloak/keycloak:24.0.1
     container_name: keycloak
     ports:
       - "7080:8080"
@@ -29,7 +29,7 @@ services:
       service: network-deploy-service
 
   read:
-    image: grafana/loki:2.9.2
+    image: grafana/loki:2.9.5
     command: "-config.file=/etc/loki/config.yaml -target=read"
     ports:
       - 3101:3100
@@ -50,7 +50,7 @@ services:
           - loki
 
   write:
-    image: grafana/loki:2.9.2
+    image: grafana/loki:2.9.5
     command: "-config.file=/etc/loki/config.yaml -target=write"
     ports:
       - 3102:3100
@@ -69,7 +69,7 @@ services:
       <<: *loki-dns
 
   promtail:
-    image: grafana/promtail:2.9.2
+    image: grafana/promtail:2.9.5
     volumes:
       - ../observability/promtail/promtail-local-config.yaml:/etc/promtail/config.yaml:ro
       - /var/run/docker.sock:/var/run/docker.sock
@@ -108,7 +108,7 @@ services:
       service: network-deploy-service
 
   prometheus:
-    image: prom/prometheus:v2.48.0
+    image: prom/prometheus:v2.50.1
     container_name: prometheus
     ports:
       - "9090:9090"
@@ -249,6 +249,9 @@ services:
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
+    depends_on:
+      configserver:
+        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -272,6 +275,10 @@ services:
       retries: 20
       start_period: 10s
     depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
       rabbit:
         condition: service_healthy
     environment:
@@ -285,6 +292,11 @@ services:
   loans:
     image: "eazybytes/loans:s13"
     container_name: loans-ms
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
@@ -301,6 +313,11 @@ services:
   cards:
     image: "eazybytes/cards:s13"
     container_name: cards-ms
+    depends_on:
+      configserver:
+        condition: service_healthy
+      eurekaserver:
+        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:9000/actuator/health/readiness | grep UP || exit 1"
       interval: 20s
