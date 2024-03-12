@@ -1,6 +1,6 @@
 services:
   rabbit:
-    image: rabbitmq:3.12-management
+    image: rabbitmq:3.13-management
     hostname: rabbitmq
     ports:
       - "5672:5672"
@@ -38,6 +38,9 @@ services:
     container_name: accounts-ms
     ports:
       - "8080:8080"
+    depends_on:
+      configserver:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "accounts"
     extends:
@@ -49,6 +52,9 @@ services:
     container_name: loans-ms
     ports:
       - "8090:8090"
+    depends_on:
+      configserver:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "loans"
     extends:
@@ -60,6 +66,9 @@ services:
     container_name: cards-ms
     ports:
       - "9000:9000"
+    depends_on:
+      configserver:
+        condition: service_healthy
     environment:
       SPRING_APPLICATION_NAME: "cards"
     extends:
