@@ -12,15 +12,17 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
   annotations:
+    {{- if .Values.provisioning.useHelmHooks }}
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
   template:
     metadata:
-      {{- $podLabels := merge .Values.provisioning.podLabels .Values.commonLabels }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.provisioning.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kafka-provisioning
       {{- if .Values.provisioning.podAnnotations }}
@@ -28,13 +30,14 @@ spec:
       {{- end }}
     spec:
       serviceAccountName: {{ template "kafka.provisioning.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.provisioning.automountServiceAccountToken }}
       enableServiceLinks: {{ .Values.provisioning.enableServiceLinks }}
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}
       schedulerName: {{ .Values.provisioning.schedulerName | quote }}
       {{- end }}
       {{- if .Values.provisioning.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.provisioning.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       restartPolicy: OnFailure
       terminationGracePeriodSeconds: 0
@@ -51,7 +54,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           command:
             - /bin/bash
@@ -66,6 +69,8 @@ spec:
               echo "Kafka is available";
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
         {{- end }}
         {{- if .Values.provisioning.initContainers }}
@@ -77,7 +82,7 @@ spec:
           image: {{ include "kafka.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.provisioning.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.provisioning.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.provisioning.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -135,6 +140,11 @@ spec:
                 {{- else if regexFind "SCRAM-SHA-512" ( upper .Values.sasl.enabledMechanisms) }}
                 kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism SCRAM-SHA-512
                 kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
+                {{- else if regexFind "OAUTHBEARER" ( upper .Values.sasl.enabledMechanisms) }}
+                kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism OAUTHBEARER
+                kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId=\"$SASL_CLIENT_ID\" password=\"$SASL_CLIENT_SECRET\";"
+                kafka_common_conf_set "$CLIENT_CONF" sasl.login.callback.handler.class "org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler"
+                kafka_common_conf_set "$CLIENT_CONF" sasl.oauthbearer.token.endpoint.url {{ .Values.sasl.oauthbearer.tokenEndpointUrl | quote }}
                 {{- end }}
                 {{- end }}
               fi
@@ -179,7 +189,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
+            {{- if and (regexFind "SSL" (upper .Values.listeners.client.protocol)) .Values.provisioning.auth.tls.passwordsSecret }}
             - name: KAFKA_CLIENT_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -199,6 +209,7 @@ spec:
             - name: KAFKA_SERVICE
               value: {{ printf "%s:%d" (include "common.names.fullname" .) (.Values.service.ports.client | int64) }}
             {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: SASL_USERNAME
               value: {{ index .Values.sasl.client.users 0 | quote }}
             - name: SASL_USER_PASSWORD
@@ -206,6 +217,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: system-user-password
+            {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            - name: SASL_CLIENT_ID
+              value: {{ .Values.sasl.interbroker.clientId | quote }}
+            - name: SASL_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: inter-broker-client-secret
+            {{- end }}
             {{- end }}
             {{- if .Values.provisioning.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.extraEnvVars "context" $) | nindent 12 }}
@@ -223,6 +244,8 @@ spec:
           {{- end }}
           {{- if .Values.provisioning.resources }}
           resources: {{- toYaml .Values.provisioning.resources | nindent 12 }}
+          {{- else if ne .Values.provisioning.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.provisioning.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}

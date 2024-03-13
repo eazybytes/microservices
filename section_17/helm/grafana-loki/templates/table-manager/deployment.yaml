@@ -9,7 +9,9 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-loki.table-manager.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: table-manager
   {{- if .Values.commonAnnotations }}
@@ -20,7 +22,7 @@ spec:
   {{- if .Values.tableManager.updateStrategy }}
   strategy: {{- toYaml .Values.tableManager.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.tableManager.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.tableManager.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
@@ -39,6 +41,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.tableManager.automountServiceAccountToken }}
       {{- if .Values.tableManager.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -66,7 +69,7 @@ spec:
       schedulerName: {{ .Values.tableManager.schedulerName }}
       {{- end }}
       {{- if .Values.tableManager.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.tableManager.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tableManager.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.tableManager.initContainers }}
@@ -77,7 +80,7 @@ spec:
           image: {{ template "grafana-loki.image" . }}
           imagePullPolicy: {{ .Values.loki.image.pullPolicy }}
           {{- if .Values.tableManager.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.tableManager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.tableManager.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -115,6 +118,8 @@ spec:
               name: grpc
           {{- if .Values.tableManager.resources }}
           resources: {{- toYaml .Values.tableManager.resources | nindent 12 }}
+          {{- else if ne .Values.tableManager.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.tableManager.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.tableManager.customLivenessProbe }}
@@ -145,6 +150,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: loki-config
               mountPath: {{ .Values.loki.dataDir }}/conf/loki.yaml
               subPath: loki.yaml
@@ -155,6 +163,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.tableManager.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: loki-config
           configMap:
             name: {{ template "grafana-loki.loki.configmapName" . }}

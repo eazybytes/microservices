@@ -18,7 +18,7 @@ spec:
   {{- if .Values.ingester.updateStrategy }}
   updateStrategy: {{- toYaml .Values.ingester.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.ingester.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: ingester
@@ -36,6 +36,7 @@ spec:
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.ingester.automountServiceAccountToken }}
       {{- if .Values.ingester.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -63,7 +64,7 @@ spec:
       schedulerName: {{ .Values.ingester.schedulerName }}
       {{- end }}
       {{- if .Values.ingester.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.ingester.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       initContainers:
         {{- if .Values.ingester.initContainers }}
@@ -89,8 +90,13 @@ spec:
           {{- end }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- else if ne .Values.volumePermissions.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.volumePermissions.resourcesPreset) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: data
               mountPath: {{ .Values.tempo.dataDir }}
         {{- end }}
@@ -99,7 +105,7 @@ spec:
           image: {{ template "grafana-tempo.image" . }}
           imagePullPolicy: {{ .Values.tempo.image.pullPolicy }}
           {{- if .Values.ingester.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.ingester.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.ingester.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -137,6 +143,8 @@ spec:
               name: grpc
           {{- if .Values.ingester.resources }}
           resources: {{- toYaml .Values.ingester.resources | nindent 12 }}
+          {{- else if ne .Values.ingester.resourcesPreset "none" }}
+          resources: {{- include "common.resources.preset" (dict "type" .Values.ingester.resourcesPreset) | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ingester.customLivenessProbe }}
@@ -165,6 +173,9 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingester.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
             - name: tempo-config
               mountPath: /bitnami/grafana-tempo/conf/tempo.yaml
               subPath: tempo.yaml
@@ -180,6 +191,8 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.ingester.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        - name: empty-dir
+          emptyDir: {}
         - name: tempo-config
           configMap:
             name: {{ template "grafana-tempo.tempoConfigmapName" . }}
@@ -197,7 +210,7 @@ spec:
     - metadata:
         name: data
         {{- if or .Values.ingester.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.ingester.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}

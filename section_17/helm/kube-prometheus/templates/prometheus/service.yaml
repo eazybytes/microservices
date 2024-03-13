@@ -14,7 +14,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.prometheus.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.prometheus.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
@@ -27,6 +27,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (not (empty .Values.prometheus.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.prometheus.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (not (empty .Values.prometheus.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.prometheus.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.prometheus.service.type "LoadBalancer") (not (empty .Values.prometheus.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.prometheus.service.loadBalancerSourceRanges }}
