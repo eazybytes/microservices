@@ -168,6 +168,41 @@ Return true if SASL connections should be configured
 {{- end -}}
 
 {{/*
+Returns true if a sasl mechanism that uses usernames and passwords is in use
+*/}}
+{{- define "kafka.saslUserPasswordsEnabled" -}}
+{{- if (include "kafka.saslEnabled" .) -}}
+{{- if or (regexFind "PLAIN" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) -}}
+true
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if a sasl mechanism that uses client IDs and client secrets is in use
+*/}}
+{{- define "kafka.saslClientSecretsEnabled" -}}
+{{- if (include "kafka.saslEnabled" .) -}}
+{{- if (regexFind "OAUTHBEARER" (upper .Values.sasl.enabledMechanisms)) -}}
+true
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns the security module based on the provided sasl mechanism
+*/}}
+{{- define "kafka.saslSecurityModule" -}}
+{{- if eq "PLAIN" .mechanism -}}
+org.apache.kafka.common.security.plain.PlainLoginModule required
+{{- else if regexFind "SCRAM" .mechanism -}}
+org.apache.kafka.common.security.scram.ScramLoginModule required
+{{- else if eq "OAUTHBEARER" .mechanism -}}
+org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the Kafka SASL credentials secret
 */}}
 {{- define "kafka.saslSecretName" -}}
@@ -266,7 +301,7 @@ Create the name of the service account to use for the Kafka Provisioning client
 */}}
 {{- define "kafka.provisioning.serviceAccountName" -}}
 {{- if .Values.provisioning.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.provisioning.serviceAccount.name }}
+    {{ default (printf "%s-provisioning" (include "common.names.fullname" .)) .Values.provisioning.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.provisioning.serviceAccount.name }}
 {{- end -}}
@@ -286,10 +321,52 @@ Return the Kafka controller-eligible configuration configmap
 {{- end -}}
 
 {{/*
+Return the Kafka controller-eligible secret configuration
+*/}}
+{{- define "kafka.controller.secretConfigName" -}}
+{{- if .Values.controller.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.existingSecretConfig "context" $) -}}
+{{- else if .Values.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.existingSecretConfig "context" $) -}}
+{{- else -}}
+    {{- printf "%s-controller-secret-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka controller-eligible secret configuration values 
+*/}}
+{{- define "kafka.controller.secretConfig" -}}
+{{- if .Values.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.secretConfig "context" $ ) }}
+{{- end }}
+{{- if .Values.controller.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.controller.secretConfig "context" $ ) }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created for controller-eligible pods
 */}}
 {{- define "kafka.controller.createConfigmap" -}}
 {{- if and (not .Values.controller.existingConfigmap) (not .Values.existingConfigmap) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object with config should be created for controller-eligible pods
+*/}}
+{{- define "kafka.controller.createSecretConfig" -}}
+{{- if and (or .Values.controller.secretConfig .Values.secretConfig) (and (not .Values.controller.existingSecretConfig) (not .Values.existingSecretConfig)) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+{{/*
+Return true if a secret object with config exists for controller-eligible pods
+*/}}
+{{- define "kafka.controller.secretConfigExists" -}}
+{{- if or .Values.controller.secretConfig .Values.secretConfig .Values.controller.existingSecretConfig .Values.existingSecretConfig }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -308,10 +385,53 @@ Return the Kafka broker configuration configmap
 {{- end -}}
 
 {{/*
+Return the Kafka broker secret configuration
+*/}}
+{{- define "kafka.broker.secretConfigName" -}}
+{{- if .Values.broker.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.broker.existingSecretConfig "context" $) -}}
+{{- else if .Values.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.existingSecretConfig "context" $) -}}
+{{- else -}}
+    {{- printf "%s-broker-secret-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka broker secret configuration values 
+*/}}
+{{- define "kafka.broker.secretConfig" -}}
+{{- if .Values.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.secretConfig "context" $ ) }}
+{{- end }}
+{{- if .Values.broker.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.broker.secretConfig "context" $ ) }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created for broker pods
 */}}
 {{- define "kafka.broker.createConfigmap" -}}
 {{- if and (not .Values.broker.existingConfigmap) (not .Values.existingConfigmap) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object with config should be created for broker pods
+*/}}
+{{- define "kafka.broker.createSecretConfig" -}}
+{{- if and (or .Values.broker.secretConfig .Values.secretConfig) (and (not .Values.broker.existingSecretConfig) (not .Values.existingSecretConfig)) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object with config exists for broker pods
+*/}}
+{{- define "kafka.broker.secretConfigExists" -}}
+{{- if or .Values.broker.secretConfig .Values.secretConfig .Values.broker.existingSecretConfig .Values.existingSecretConfig }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -333,7 +453,9 @@ The exporter uses a different nomenclature so we need to do this hack
 */}}
 {{- define "kafka.metrics.kafka.saslMechanism" -}}
 {{- $saslMechanisms := .Values.sasl.enabledMechanisms }}
-{{- if contains "SCRAM-SHA-512" (upper $saslMechanisms) }}
+{{- if contains "OAUTHBEARER" (upper $saslMechanisms) }}
+    {{- print "oauthbearer" -}}
+{{- else if contains "SCRAM-SHA-512" (upper $saslMechanisms) }}
     {{- print "scram-sha512" -}}
 {{- else if contains "SCRAM-SHA-256" (upper $saslMechanisms) }}
     {{- print "scram-sha256" -}}
@@ -476,7 +598,6 @@ Returns the controller quorum voters based on the number of controller-eligible 
 Section of the server.properties configmap shared by both controller-eligible and broker nodes
 */}}
 {{- define "kafka.commonConfig" -}}
-log.dir={{ printf "%s/data" .Values.controller.persistence.mountPath }}
 {{- if or (include "kafka.saslEnabled" .) }}
 sasl.enabled.mechanisms={{ upper .Values.sasl.enabledMechanisms }}
 {{- end }}
@@ -512,11 +633,17 @@ listener.name.{{lower $listener.name}}.ssl.client.auth={{ $listener.sslClientAut
 {{- end }}
 {{- if regexFind "SASL" (upper $listener.protocol) }}
 {{- range $mechanism := ( splitList "," $.Values.sasl.enabledMechanisms )}}
-  {{- $securityModule := ternary "org.apache.kafka.common.security.plain.PlainLoginModule required" "org.apache.kafka.common.security.scram.ScramLoginModule required" (eq "PLAIN" (upper $mechanism)) }}
+  {{- $securityModule := include "kafka.saslSecurityModule" (dict "mechanism" (upper $mechanism)) }}
   {{- $saslJaasConfig := list $securityModule }}
   {{- if eq $listener.name $.Values.listeners.interbroker.name }}
+  {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
+  {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.interbroker.clientId) }}
+  {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"interbroker-client-secret-placeholder\"") }}
+listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
+  {{- else }}
   {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.interbroker.user) }}
   {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"interbroker-password-placeholder\"") }}
+  {{- end }}
   {{- end }}
   {{- if eq (upper $mechanism) "PLAIN" }}
   {{- if eq $listener.name $.Values.listeners.interbroker.name }}
@@ -527,8 +654,17 @@ listener.name.{{lower $listener.name}}.ssl.client.auth={{ $listener.sslClientAut
   {{- end }}
   {{- end }}
 listener.name.{{lower $listener.name}}.{{lower $mechanism}}.sasl.jaas.config={{ join " " $saslJaasConfig }};
+  {{- if eq (upper $mechanism) "OAUTHBEARER" }}
+listener.name.{{lower $listener.name}}.oauthbearer.sasl.server.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerValidatorCallbackHandler
+  {{- end }}
 {{- end }}
 {{- end }}
+{{- end }}
+{{- if regexFind "OAUTHBEARER" $.Values.sasl.enabledMechanisms }}
+sasl.oauthbearer.token.endpoint.url={{ $.Values.sasl.oauthbearer.tokenEndpointUrl }}
+sasl.oauthbearer.jwks.endpoint.url={{ $.Values.sasl.oauthbearer.jwksEndpointUrl }}
+sasl.oauthbearer.expected.audience={{ $.Values.sasl.oauthbearer.expectedAudience }}
+sasl.oauthbearer.sub.claim.name={{ $.Values.sasl.oauthbearer.subClaimName }}
 {{- end }}
 # End of SASL JAAS configuration
 {{- end }}
@@ -540,11 +676,6 @@ Zookeeper connection section of the server.properties
 {{- define "kafka.zookeeperConfig" -}}
 zookeeper.connect={{ include "kafka.zookeeperConnect" . }}
 #broker.id=
-{{- if .Values.sasl.zookeeper.user }}
-sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required \
-    username="{{ .Values.sasl.zookeeper.user }}" \
-    password="zookeeper-password-placeholder";
-{{- end }}
 {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
 zookeeper.clientCnxnSocket=org.apache.zookeeper.ClientCnxnSocketNetty
 zookeeper.ssl.client.enable=true
@@ -570,10 +701,15 @@ listener.name.{{lower $listener.name}}.ssl.client.auth={{ $listener.sslClientAut
 {{- end }}
 {{- if regexFind "SASL" (upper $listener.protocol) }}
   {{- $mechanism := $.Values.sasl.controllerMechanism }}
-  {{- $securityModule := ternary "org.apache.kafka.common.security.plain.PlainLoginModule required" "org.apache.kafka.common.security.scram.ScramLoginModule required" (eq "PLAIN" (upper $mechanism)) }}
+  {{- $securityModule := include "kafka.saslSecurityModule" (dict "mechanism" (upper $mechanism)) }}
   {{- $saslJaasConfig := list $securityModule }}
+  {{- if (eq (upper $mechanism) "OAUTHBEARER") }}
+  {{- $saslJaasConfig = append $saslJaasConfig (printf "clientId=\"%s\"" $.Values.sasl.controller.clientId) }}
+  {{- $saslJaasConfig = append $saslJaasConfig (print "clientSecret=\"controller-client-secret-placeholder\"") }}
+  {{- else }}
   {{- $saslJaasConfig = append $saslJaasConfig (printf "username=\"%s\"" $.Values.sasl.controller.user) }}
   {{- $saslJaasConfig = append $saslJaasConfig (print "password=\"controller-password-placeholder\"") }}
+  {{- end }}
   {{- if eq (upper $mechanism) "PLAIN" }}
   {{- $saslJaasConfig = append $saslJaasConfig (printf "user_%s=\"controller-password-placeholder\"" $.Values.sasl.controller.user) }}
   {{- end }}
@@ -581,6 +717,10 @@ listener.name.{{lower $listener.name}}.ssl.client.auth={{ $listener.sslClientAut
 sasl.mechanism.controller.protocol={{ upper $mechanism }}
 listener.name.{{lower $listener.name}}.sasl.enabled.mechanisms={{ upper $mechanism }}
 listener.name.{{lower $listener.name}}.{{lower $mechanism }}.sasl.jaas.config={{ join " " $saslJaasConfig }};
+{{- if regexFind "OAUTHBEARER" (upper $mechanism) }}
+listener.name.{{lower $listener.name}}.oauthbearer.sasl.server.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerValidatorCallbackHandler
+listener.name.{{lower $listener.name}}.oauthbearer.sasl.login.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
+{{- end }}
 {{- end }}
 {{- end -}}
 
@@ -594,8 +734,11 @@ Init container definition for Kafka initialization
   image: {{ include "kafka.image" .context }}
   imagePullPolicy: {{ .context.Values.image.pullPolicy }}
   {{- if $roleSettings.containerSecurityContext.enabled }}
-  securityContext: {{- omit $roleSettings.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" $roleSettings.containerSecurityContext "context" .context) | nindent 4 }}
   {{- end }}
+  {{- if $roleSettings.initContainerResources }}
+  resources: {{- toYaml $roleSettings.initContainerResources | nindent 4 }}  
+  {{- end }} 
   command:
     - /bin/bash
   args:
@@ -668,6 +811,7 @@ Init container definition for Kafka initialization
     {{- end }}
     {{- end }}
     {{- if and (include "kafka.client.saslEnabled" .context ) .context.Values.sasl.client.users }}
+    {{- if (include "kafka.saslUserPasswordsEnabled" .context) }}
     - name: KAFKA_CLIENT_USERS
       value: {{ join "," .context.Values.sasl.client.users | quote }}
     - name: KAFKA_CLIENT_PASSWORDS
@@ -676,7 +820,9 @@ Init container definition for Kafka initialization
           name: {{ include "kafka.saslSecretName" .context }}
           key: client-passwords
     {{- end }}
+    {{- end }}
     {{- if regexFind "SASL" (upper .context.Values.listeners.interbroker.protocol) }}
+    {{- if (include "kafka.saslUserPasswordsEnabled" .context) }}
     - name: KAFKA_INTER_BROKER_USER
       value: {{ .context.Values.sasl.interbroker.user | quote }}
     - name: KAFKA_INTER_BROKER_PASSWORD
@@ -685,12 +831,35 @@ Init container definition for Kafka initialization
           name: {{ include "kafka.saslSecretName" .context }}
           key: inter-broker-password
     {{- end }}
+    {{- if (include "kafka.saslClientSecretsEnabled" .context) }}
+    - name: KAFKA_INTER_BROKER_CLIENT_ID
+      value: {{ .context.Values.sasl.interbroker.clientId | quote }}
+    - name: KAFKA_INTER_BROKER_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "kafka.saslSecretName" .context }}
+          key: inter-broker-client-secret
+    {{- end }}
+    {{- end }}
     {{- if and .context.Values.kraft.enabled (regexFind "SASL" (upper .context.Values.listeners.controller.protocol)) }}
+    {{- if (include "kafka.saslUserPasswordsEnabled" .context) }}
+    - name: KAFKA_CONTROLLER_USER
+      value: {{ .context.Values.sasl.controller.user | quote }}
     - name: KAFKA_CONTROLLER_PASSWORD
       valueFrom:
         secretKeyRef:
           name: {{ include "kafka.saslSecretName" .context }}
           key: controller-password
+    {{- end }}
+    {{- if (include "kafka.saslClientSecretsEnabled" .context) }}
+    - name: KAFKA_CONTROLLER_CLIENT_ID
+      value: {{ .context.Values.sasl.controller.clientId | quote }}
+    - name: KAFKA_CONTROLLER_CLIENT_SECRET
+      valueFrom:
+        secretKeyRef:
+          name: {{ include "kafka.saslSecretName" .context }}
+          key: controller-client-secret
+    {{- end }}
     {{- end }}
     {{- if (include "kafka.sslEnabled" .context )  }}
     - name: KAFKA_TLS_TYPE
@@ -747,6 +916,8 @@ Init container definition for Kafka initialization
       mountPath: /config
     - name: kafka-configmaps
       mountPath: /configmaps
+    - name: kafka-secret-config
+      mountPath: /secret-config
     - name: scripts
       mountPath: /scripts
     - name: tmp
@@ -788,8 +959,13 @@ Init container definition for waiting for Kubernetes autodiscovery
           fieldPath: metadata.name
     - name: AUTODISCOVERY_SERVICE_TYPE
       value: {{ $externalAccessService.service.type | quote }}
+  {{- if .context.Values.externalAccess.autoDiscovery.containerSecurityContext.enabled }}
+  securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .context.Values.externalAccess.autoDiscovery.containerSecurityContext "context" .context) | nindent 4 }}
+  {{- end }}
   {{- if .context.Values.externalAccess.autoDiscovery.resources }}
   resources: {{- toYaml .context.Values.externalAccess.autoDiscovery.resources | nindent 12 }}
+  {{- else if ne .context.Values.externalAccess.autoDiscovery.resourcesPreset "none" }}
+  resources: {{- include "common.resources.preset" (dict "type" .context.Values.externalAccess.autoDiscovery.resourcesPreset) | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: scripts
@@ -952,17 +1128,31 @@ kafka: rbac.create
     K8s API. Please note this initContainer requires specific RBAC resources. You can create them
     by specifying "--set rbac.create=true".
 {{- end -}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (gt (int .Values.controller.replicaCount) 0) (not .Values.controller.automountServiceAccountToken) }}
+kafka: controller-automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to auto-detect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+    and broker.automountServiceAccountToken=true.
+{{- end -}}
+{{- if and .Values.externalAccess.enabled .Values.externalAccess.autoDiscovery.enabled (gt (int .Values.broker.replicaCount) 0) (not .Values.broker.automountServiceAccountToken) }}
+kafka: broker-automountServiceAccountToken
+    By specifying "externalAccess.enabled=true" and "externalAccess.autoDiscovery.enabled=true"
+    an initContainer will be used to auto-detect the external IPs/ports by querying the
+    K8s API. Please note this initContainer requires the service account token. Please set controller.automountServiceAccountToken=true
+    and broker.automountServiceAccountToken=true.
+{{- end -}}
 {{- end -}}
 
 {{/* Validate values of Kafka - LoadBalancerIPs or LoadBalancerNames should be set when autoDiscovery is disabled */}}
 {{- define "kafka.validateValues.externalAccessAutoDiscoveryIPsOrNames" -}}
 {{- $loadBalancerNameListLength := len .Values.externalAccess.controller.service.loadBalancerNames -}}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.controller.service.loadBalancerIPs -}}
-{{- if and .Values.externalAccess.enabled (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)) (eq .Values.externalAccess.controller.service.type "LoadBalancer") (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerNameListLength 0) (eq $loadBalancerIPListLength 0) }}
+{{- if and .Values.externalAccess.enabled (gt (int .Values.controller.replicaCount) 0) (or .Values.externalAccess.controller.forceExpose (not .Values.controller.controllerOnly)) (eq .Values.externalAccess.controller.service.type "LoadBalancer") (not .Values.externalAccess.autoDiscovery.enabled) (eq $loadBalancerNameListLength 0) (eq $loadBalancerIPListLength 0) }}
 kafka: externalAccess.controller.service.loadBalancerNames or externalAccess.controller.service.loadBalancerIPs
     By specifying "externalAccess.enabled=true", "externalAccess.autoDiscovery.enabled=false" and
     "externalAccess.controller.service.type=LoadBalancer" at least one of externalAccess.controller.service.loadBalancerNames
-    or externalAccess.controller.service.loadBalancerIPs  must be set and the length of those arrays must be equal
+    or externalAccess.controller.service.loadBalancerIPs must be set and the length of those arrays must be equal
     to the number of replicas.
 {{- end -}}
 {{- $loadBalancerNameListLength := len .Values.externalAccess.broker.service.loadBalancerNames -}}
@@ -972,7 +1162,7 @@ kafka: externalAccess.controller.service.loadBalancerNames or externalAccess.con
 kafka: externalAccess.broker.service.loadBalancerNames or externalAccess.broker.service.loadBalancerIPs
     By specifying "externalAccess.enabled=true", "externalAccess.autoDiscovery.enabled=false" and
     "externalAccess.broker.service.type=LoadBalancer" at least one of externalAccess.broker.service.loadBalancerNames
-    or externalAccess.broker.service.loadBalancerIPs  must be set and the length of those arrays must be equal
+    or externalAccess.broker.service.loadBalancerIPs must be set and the length of those arrays must be equal
     to the number of replicas.
 {{- end -}}
 {{- end -}}

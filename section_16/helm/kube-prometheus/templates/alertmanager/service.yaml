@@ -11,7 +11,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
   {{- if or .Values.alertmanager.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.alertmanager.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
@@ -33,6 +33,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.alertmanager.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (eq .Values.alertmanager.service.externalTrafficPolicy "Local") .Values.alertmanager.service.healthCheckNodePort }}
   healthCheckNodePort: {{ .Values.alertmanager.service.healthCheckNodePort }}

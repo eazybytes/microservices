@@ -13,14 +13,16 @@ kind: Deployment
 metadata:
   name: {{ include "kafka.metrics.kafka.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.metrics.kafka.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: cluster-metrics
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
-  {{- $podLabels := merge .Values.metrics.kafka.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.kafka.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: cluster-metrics
@@ -33,6 +35,7 @@ spec:
       {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
+      automountServiceAccountToken: {{ .Values.metrics.kafka.automountServiceAccountToken }}
       {{- if .Values.metrics.kafka.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -60,7 +63,7 @@ spec:
       schedulerName: {{ .Values.metrics.kafka.schedulerName }}
       {{- end }}
       {{- if .Values.metrics.kafka.podSecurityContext.enabled }}
-      securityContext: {{- omit .Values.metrics.kafka.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.kafka.podSecurityContext "context" $) | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ template "kafka.metrics.kafka.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.metrics.kafka.enableServiceLinks }}
@@ -72,7 +75,7 @@ spec:
           image: {{ include "kafka.metrics.kafka.image" . }}
           imagePullPolicy: {{ .Values.metrics.kafka.image.pullPolicy | quote }}
           {{- if .Values.metrics.kafka.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.metrics.kafka.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.metrics.kafka.containerSecurityContext "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
@@ -133,6 +136,30 @@ spec:
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.kafka.containerPorts.metrics }}
+          {{- if .Values.metrics.kafka.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.kafka.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.kafka.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.kafka.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- end }}
+          {{- if .Values.metrics.kafka.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.kafka.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.kafka.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: /metrics
+              port: metrics
+          {{- end }}
           {{- if .Values.metrics.kafka.resources }}
           resources: {{ toYaml .Values.metrics.kafka.resources | nindent 12 }}
           {{- end }}
