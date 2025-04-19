@@ -16,7 +16,7 @@ services:
       service: network-deploy-service
 
   configserver:
-    image: "eazybytes/configserver:s6"
+    image: "achour94/configserver:s6"
     container_name: configserver-ms
     ports:
       - "8071:8071"
@@ -34,7 +34,7 @@ services:
       service: microservice-base-config
 
   accounts:
-    image: "eazybytes/accounts:s6"
+    image: "achour94/accounts:s6"
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -48,7 +48,7 @@ services:
       service: microservice-configserver-config
 
   loans:
-    image: "eazybytes/loans:s6"
+    image: "achour94/loans:s6"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -62,7 +62,7 @@ services:
       service: microservice-configserver-config
 
   cards:
-    image: "eazybytes/cards:s6"
+    image: "achour94/cards:s6"
     container_name: cards-ms
     ports:
       - "9000:9000"
