@@ -2,20 +2,20 @@ spring:
   application:
     name: "configserver"
   profiles:
-    # active: native
+#     active: native
     active: git
   cloud:
     config:
       server:
-        # native:
-          # search-locations: "classpath:/config"
-          # search-locations: "file:///Users//eazybytes//Documents//config"
+#         native:
+#           search-locations: "classpath:/config"
+#           search-locations: "file:///Users/berrahmaach//IdeaProjects//microservices//config"
         git:
-          uri: "https://github.com/eazybytes/eazybytes-config.git"
-          default-label: main
-          timeout: 5
-          clone-on-start: true
-          force-pull: true
+          uri: "https://github.com/achour94/eazybytes-config.git"
+          default-label: main # branch name
+          timeout: 5 # represent the time in seconds to wait for the git clone
+          clone-on-start: true # clone the repository on startup
+          force-pull: true # force pull the repository on startup
   rabbitmq:
     host: "localhost"
     port: 5672
