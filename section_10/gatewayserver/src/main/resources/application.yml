@@ -46,8 +46,8 @@ logging:
 resilience4j.circuitbreaker:
   configs:
     default:
-      slidingWindowSize: 10
-      permittedNumberOfCallsInHalfOpenState: 2
-      failureRateThreshold: 50
-      waitDurationInOpenState: 10000
+      slidingWindowSize: 10 # Number of calls to consider for the failure rate
+      permittedNumberOfCallsInHalfOpenState: 2 # Number of calls to allow in half-open state
+      failureRateThreshold: 50 # Percentage of failure rate to open the circuit
+      waitDurationInOpenState: 10000 # Time in milliseconds to wait before transitioning from open to half-open state
 
