@@ -102,9 +102,50 @@
 				<artifactId>jib-maven-plugin</artifactId>
 				<version>3.4.2</version>
 				<configuration>
+					<from>
+						<image>openjdk:21-jdk</image>
+						<platforms>
+							<!--							<platform>-->
+							<!--								<architecture>amd64</architecture>-->
+							<!--								<os>linux</os>-->
+							<!--							</platform>-->
+							<platform>
+								<architecture>arm64</architecture>
+								<os>linux</os>
+							</platform>
+						</platforms>
+					</from>
 					<to>
-						<image>eazybytes/${project.artifactId}:s11</image>
+						<image>achour94/${project.artifactId}:s11</image>
 					</to>
+				</configuration>
+			</plugin>
+			<!-- Add this plugin to ensure Lombok works in Maven builds -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
+			<!-- You may also need this compiler configuration -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lombok.version}</version>
+						</path>
+					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
 		</plugins>
