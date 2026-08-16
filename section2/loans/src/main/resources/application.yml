@@ -1,6 +1,8 @@
 server:
   port: 8090
 spring:
+  application:
+    name: loans
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -14,3 +16,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+
