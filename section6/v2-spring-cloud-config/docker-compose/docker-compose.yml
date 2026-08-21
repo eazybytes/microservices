@@ -1,80 +1,80 @@
+name: eazybank-microservices
 services:
   rabbit:
     image: rabbitmq:4-management
-    hostname: rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     healthcheck:
       test: rabbitmq-diagnostics check_port_connectivity
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 5s
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:?set RABBITMQ_DEFAULT_USER in the env file}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:?set RABBITMQ_DEFAULT_PASS in the env file}
     extends:
       file: common-config.yml
       service: network-deploy-service
-
   configserver:
-    image: "eazybytes/configserver:s6"
+    image: "eazybytes/configserver:${IMAGE_TAG:-s6}"
     container_name: configserver-ms
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
     healthcheck:
-      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8071 && printf 'GET /actuator/health/readiness HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && grep -q '\"status\":\"UP\"' <&3"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 5s
+    depends_on:
+      rabbit:
+        condition: service_healthy
     extends:
       file: common-config.yml
       service: microservice-base-config
 
   accounts:
-    image: "eazybytes/accounts:s6"
+    image: "eazybytes/accounts:${IMAGE_TAG:-s6}"
     container_name: accounts-ms
     ports:
-      - "8080:8080"
+        - "8080:8080"
     depends_on:
       configserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "accounts"
     extends:
       file: common-config.yml
       service: microservice-configserver-config
 
   loans:
-    image: "eazybytes/loans:s6"
+    image: "eazybytes/loans:${IMAGE_TAG:-s6}"
     container_name: loans-ms
     ports:
       - "8090:8090"
     depends_on:
       configserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "loans"
     extends:
       file: common-config.yml
       service: microservice-configserver-config
 
   cards:
-    image: "eazybytes/cards:s6"
+    image: "eazybytes/cards:${IMAGE_TAG:-s6}"
     container_name: cards-ms
     ports:
       - "9000:9000"
     depends_on:
       configserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "cards"
     extends:
       file: common-config.yml
       service: microservice-configserver-config
 
 networks:
   eazybank:
-    driver: "bridge"
+    driver: bridge

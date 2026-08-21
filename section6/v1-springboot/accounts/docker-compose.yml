@@ -1,18 +1,22 @@
+name: eazybank-microservices
 services:
   accounts:
     image: "eazybytes/accounts:s4"
     container_name: accounts-ms
+    restart: unless-stopped
     ports:
-      - "8080:8080"
+        - "8080:8080"
     deploy:
       resources:
         limits:
           memory: 700m
     networks:
-      - eazybank
+        - eazybank
+
   loans:
     image: "eazybytes/loans:s4"
     container_name: loans-ms
+    restart: unless-stopped
     ports:
       - "8090:8090"
     deploy:
@@ -21,9 +25,11 @@ services:
           memory: 700m
     networks:
       - eazybank
+
   cards:
     image: "eazybytes/cards:s4"
     container_name: cards-ms
+    restart: unless-stopped
     ports:
       - "9000:9000"
     deploy:
@@ -32,6 +38,7 @@ services:
           memory: 700m
     networks:
       - eazybank
+
 networks:
   eazybank:
-    driver: "bridge"
+    driver: bridge

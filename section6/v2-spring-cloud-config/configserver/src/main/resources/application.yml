@@ -1,14 +1,14 @@
 spring:
   application:
-    name: "configserver"
+    name: configserver
   profiles:
     # active: native
-    active: git
+     active: git
   cloud:
     config:
       server:
-        # native:
-          # search-locations: "classpath:/config"
+        #native:
+          # search-locations: classpath:/config
           # search-locations: "file:///Users//eazybytes//Documents//config"
         git:
           uri: "https://github.com/eazybytes/eazybytes-config.git"
@@ -36,9 +36,12 @@ management:
     health:
       probes:
         enabled: true
-
 encrypt:
   key: "45D81EC1EF61DF9AD8D3E5BB397F9"
 
 server:
   port: 8071
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}

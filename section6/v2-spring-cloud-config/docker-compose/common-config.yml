@@ -6,16 +6,19 @@ services:
   microservice-base-config:
     extends:
       service: network-deploy-service
+    restart: unless-stopped
     deploy:
       resources:
         limits:
           memory: 700m
     environment:
       SPRING_RABBITMQ_HOST: "rabbit"
+      SPRING_RABBITMQ_USERNAME: ${RABBITMQ_DEFAULT_USER:?set RABBITMQ_DEFAULT_USER in the env file}
+      SPRING_RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS:?set RABBITMQ_DEFAULT_PASS in the env file}
 
   microservice-configserver-config:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-default}
