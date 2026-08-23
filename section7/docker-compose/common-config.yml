@@ -7,18 +7,24 @@ services:
     extends:
       service: network-deploy-service
     image: mysql
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 350m
     healthcheck:
-      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       timeout: 10s
       retries: 10
       interval: 10s
       start_period: 10s
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
 
   microservice-base-config:
     extends:
       service: network-deploy-service
+    restart: unless-stopped
     deploy:
       resources:
         limits:
@@ -28,7 +34,7 @@ services:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: qa
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-default}
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-root}

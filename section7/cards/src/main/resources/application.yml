@@ -2,9 +2,10 @@ server:
   port: 9000
 spring:
   application:
-    name: "cards"
+    name: cards
   profiles:
-    active: "prod"
+    active:
+      - "prod"
   datasource:
     url: jdbc:mysql://localhost:3308/cardsdb
     username: root
@@ -22,3 +23,8 @@ management:
     web:
       exposure:
         include: "*"
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+

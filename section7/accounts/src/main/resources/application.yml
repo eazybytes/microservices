@@ -1,12 +1,14 @@
 server:
   port: 8080
+
 spring:
   application:
-    name: "accounts"
+    name: accounts
   profiles:
-    active: "prod"
+    active:
+      - "prod"
   datasource:
-    url: jdbc:mysql://localhost:3306/accountsdb
+    url: "jdbc:mysql://localhost:3306/accountsdb"
     username: root
     password: root
   jpa:
@@ -22,3 +24,8 @@ management:
     web:
       exposure:
         include: "*"
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+

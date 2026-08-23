@@ -2,9 +2,10 @@ server:
   port: 8090
 spring:
   application:
-    name: "loans"
+    name: loans
   profiles:
-    active: "prod"
+    active:
+      - "prod"
   datasource:
     url: jdbc:mysql://localhost:3307/loansdb
     username: root
@@ -17,8 +18,13 @@ spring:
   config:
     import: "optional:configserver:http://localhost:8071/"
 
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
