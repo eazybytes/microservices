@@ -1,21 +1,22 @@
+name: eazybank-microservices
 services:
   configserver:
-    image: "eazybytes/configserver:s8"
+    image: "eazybytes/configserver:${IMAGE_TAG:-s8}"
     container_name: configserver-ms
     ports:
       - "8071:8071"
     healthcheck:
-      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8071 && printf 'GET /actuator/health/readiness HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && grep -q '\"status\":\"UP\"' <&3"]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 5s
     extends:
       file: common-config.yml
       service: microservice-base-config
 
   eurekaserver:
-    image: "eazybytes/eurekaserver:s8"
+    image: "eazybytes/eurekaserver:${IMAGE_TAG:-s8}"
     container_name: eurekaserver-ms
     ports:
       - "8070:8070"
@@ -23,35 +24,31 @@ services:
       configserver:
         condition: service_healthy
     healthcheck:
-      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      test: [ "CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8070 && printf 'GET /actuator/health/readiness HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 && grep -q '\"status\":\"UP\"' <&3" ]
       interval: 10s
       timeout: 5s
       retries: 10
-      start_period: 10s
+      start_period: 5s
     extends:
       file: common-config.yml
       service: microservice-configserver-config
-    environment:
-      SPRING_APPLICATION_NAME: "eurekaserver"
 
   accounts:
-    image: "eazybytes/accounts:s8"
+    image: "eazybytes/accounts:${IMAGE_TAG:-s8}"
     container_name: accounts-ms
     ports:
-      - "8080:8080"
+        - "8080:8080"
     depends_on:
       configserver:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "accounts"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
 
   loans:
-    image: "eazybytes/loans:s8"
+    image: "eazybytes/loans:${IMAGE_TAG:-s8}"
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -60,14 +57,12 @@ services:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "loans"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
 
   cards:
-    image: "eazybytes/cards:s8"
+    image: "eazybytes/cards:${IMAGE_TAG:-s8}"
     container_name: cards-ms
     ports:
       - "9000:9000"
@@ -76,12 +71,10 @@ services:
         condition: service_healthy
       eurekaserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "cards"
     extends:
       file: common-config.yml
       service: microservice-eureka-config
 
 networks:
   eazybank:
-    driver: "bridge"
+    driver: bridge

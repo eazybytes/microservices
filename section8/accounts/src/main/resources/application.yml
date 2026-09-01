@@ -1,25 +1,33 @@
 server:
   port: 8080
+
 spring:
   application:
-    name: "accounts"
+    name: accounts
   profiles:
-    active: "prod"
+    active:
+      - "prod"
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
+    url: "jdbc:h2:mem:testdb"
+    driverClassName: "org.h2.Driver"
     username: sa
     password: ''
   h2:
     console:
       enabled: true
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: "org.hibernate.dialect.H2Dialect"
     hibernate:
       ddl-auto: update
     show-sql: true
   config:
     import: "optional:configserver:http://localhost:8071/"
+  http:
+    serviceclient:
+      loans:
+        base-url: lb://loans
+      cards:
+        base-url: lb://cards
 
 management:
   endpoints:
@@ -47,3 +55,8 @@ info:
     name: "accounts"
     description: "Eazy Bank Accounts Application"
     version: "1.0.0"
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+
