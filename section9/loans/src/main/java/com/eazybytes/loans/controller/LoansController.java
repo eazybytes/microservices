@@ -40,21 +40,19 @@ import org.springframework.web.bind.annotation.*;
 public class LoansController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoansController.class);
-
     private ILoansService iLoansService;
+    private Environment environment;
+    private LoansContactInfoDto loansContactInfoDto;
 
-    public LoansController(ILoansService iLoansService) {
+    public LoansController(ILoansService iLoansService, Environment environment,
+            LoansContactInfoDto loansContactInfoDto) {
         this.iLoansService = iLoansService;
+        this.environment = environment;
+        this.loansContactInfoDto = loansContactInfoDto;
     }
 
     @Value("${build.version}")
     private String buildVersion;
-
-    @Autowired
-    private Environment environment;
-
-    @Autowired
-    private LoansContactInfoDto loansContactInfoDto;
 
     @Operation(
             summary = "Create Loan REST API",
@@ -103,9 +101,8 @@ public class LoansController {
     }
     )
     @GetMapping("/fetch")
-    public ResponseEntity<LoansDto> fetchLoanDetails(@RequestHeader("eazybank-correlation-id") String correlationId,
-                                                                @RequestParam
-                                                               @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    public ResponseEntity<LoansDto> fetchLoanDetails(@RequestHeader("eazybank-correlation-id")
+            String correlationId, @RequestParam @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
                                                                String mobileNumber) {
         logger.debug("eazyBank-correlation-id found: {} ", correlationId);
         LoansDto loansDto = iLoansService.fetchLoan(mobileNumber);

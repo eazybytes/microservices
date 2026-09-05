@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "gatewayserver"
+    name: gatewayserver
   config:
     import: "optional:configserver:http://localhost:8071/"
   cloud:
@@ -11,7 +11,6 @@ spring:
             locator:
               enabled: false
               lowerCaseServiceId: true
-
 management:
   endpoints:
     web:
@@ -31,8 +30,9 @@ info:
     version: "1.0.0"
 
 logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
   level:
     com:
       eazybytes:
-        gatewayserver: DEBUG
-
+            gatewayserver: DEBUG

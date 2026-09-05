@@ -6,6 +6,7 @@ services:
   microservice-base-config:
     extends:
       service: network-deploy-service
+    restart: unless-stopped
     deploy:
       resources:
         limits:
@@ -15,8 +16,8 @@ services:
     extends:
       service: microservice-base-config
     environment:
-      SPRING_PROFILES_ACTIVE: qa
       SPRING_CONFIG_IMPORT: configserver:http://configserver:8071/
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE:-default}
 
   microservice-eureka-config:
     extends:
