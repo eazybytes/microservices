@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.*;
 public class AccountsController {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountsController.class);
-
     private final IAccountsService iAccountsService;
 
     public AccountsController(IAccountsService iAccountsService) {
@@ -103,8 +102,8 @@ public class AccountsController {
     )
     @GetMapping("/fetch")
     public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam
-                                                               @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                               String mobileNumber) {
+                @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+                String mobileNumber) {
         CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
@@ -169,8 +168,8 @@ public class AccountsController {
     )
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam
-                                                                @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                                String mobileNumber) {
+            @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+            String mobileNumber) {
         boolean isDeleted = iAccountsService.deleteAccount(mobileNumber);
         if(isDeleted) {
             return ResponseEntity
@@ -201,13 +200,13 @@ public class AccountsController {
             )
     }
     )
-    @Retry(name = "getBuildInfo",fallbackMethod = "getBuildInfoFallback")
+    @Retry(name="getBuildInfo", fallbackMethod = "getBuildInfoFallback")
     @GetMapping("/build-info")
     public ResponseEntity<String> getBuildInfo() {
         logger.debug("getBuildInfo() method Invoked");
         return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(buildVersion);
+                .status(HttpStatus.OK)
+                .body(buildVersion);
     }
 
     public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
@@ -235,7 +234,7 @@ public class AccountsController {
             )
     }
     )
-    @RateLimiter(name= "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
+    @RateLimiter(name= "getJavaVersion",fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity
@@ -246,7 +245,7 @@ public class AccountsController {
     public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Java 21");
+                .body("Java 25");
     }
 
     @Operation(
@@ -273,6 +272,4 @@ public class AccountsController {
                 .status(HttpStatus.OK)
                 .body(accountsContactInfoDto);
     }
-
-
 }

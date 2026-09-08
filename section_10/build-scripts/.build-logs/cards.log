@@ -1,0 +1,60 @@
+WARNING: A restricted method in java.lang.System has been called
+WARNING: java.lang.System::load has been called by org.fusesource.jansi.internal.JansiLoader in an unnamed module (file:/Users/eazybytes/Documents/Storage/Softwares/apache-maven-3.8.6/lib/jansi-2.4.0.jar)
+WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+WARNING: sun.misc.Unsafe::objectFieldOffset has been called by com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper (file:/Users/eazybytes/Documents/Storage/Softwares/apache-maven-3.8.6/lib/guava-25.1-android.jar)
+WARNING: Please consider reporting this to the maintainers of class com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future release
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------< com.eazybytes:cards >-------------------------
+[INFO] Building cards 0.0.1-SNAPSHOT
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:3.5.0:resources (default-resources) @ cards ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- maven-compiler-plugin:3.15.0:compile (default-compile) @ cards ---
+[INFO] Recompiling the module because of added or removed source files.
+[INFO] Compiling 17 source files with javac [debug parameters release 25] to target/classes
+[INFO] 
+[INFO] --- jib-maven-plugin:3.5.2:dockerBuild (default-cli) @ cards ---
+[WARNING] 'mainClass' configured in 'maven-jar-plugin' is not a valid Java class: ${start-class}
+[INFO] 
+[INFO] Containerizing application to Docker daemon as eazybytes/cards:s10...
+[WARNING] Base image 'eclipse-temurin:25-jre' does not use a specific image digest - build may not be reproducible
+[INFO] Getting manifest for base image eclipse-temurin:25-jre...
+[INFO] Building dependencies layer...
+[INFO] Building resources layer...
+[INFO] Building classes layer...
+[INFO] Building jvm arg files layer...
+[INFO] The base image requires auth. Trying again for eclipse-temurin:25-jre...
+[WARNING] The credential helper (docker-credential-desktop) has nothing for server URL: registry-1.docker.io
+
+Got output:
+
+credentials not found in native keychain
+
+[WARNING] The credential helper (docker-credential-desktop) has nothing for server URL: registry.hub.docker.com
+
+Got output:
+
+credentials not found in native keychain
+
+[INFO] Using credentials from Docker config (/Users/eazybytes/.docker/config.json) for eclipse-temurin:25-jre
+[INFO] Using base image with digest: sha256:f9e65324a37f28209ce7dd0e5149a7aa954520ed936fb87813cf6ded2400a112
+[INFO] 
+[INFO] Container entrypoint set to [java, -cp, @/app/jib-classpath-file, com.eazybytes.cards.CardsApplication]
+[INFO] Loading to Docker daemon...
+[INFO] 
+[INFO] Built image to Docker daemon as eazybytes/cards:s10
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  18.277 s
+[INFO] Finished at: 2026-09-08T19:14:01+05:30
+[INFO] ------------------------------------------------------------------------

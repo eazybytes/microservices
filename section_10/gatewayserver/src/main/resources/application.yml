@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "gatewayserver"
+    name: gatewayserver
   config:
     import: "optional:configserver:http://localhost:8071/"
   cloud:
@@ -13,14 +13,13 @@ spring:
               lowerCaseServiceId: true
           httpclient:
             connect-timeout: 1000
-            response-timeout: 2s
+            response-timeout: 10s
   data:
     redis:
       connect-timeout: 2s
       host: localhost
       port: 6379
       timeout: 1s
-
 management:
   endpoints:
     web:
@@ -40,10 +39,12 @@ info:
     version: "1.0.0"
 
 logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
   level:
     com:
       eazybytes:
-        gatewayserver: DEBUG
+            gatewayserver: DEBUG
 
 resilience4j.circuitbreaker:
   configs:
@@ -52,4 +53,3 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-

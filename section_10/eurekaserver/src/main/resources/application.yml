@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "eurekaserver"
+    name: eurekaserver
   config:
     import: "optional:configserver:http://localhost:8071/"
 
@@ -18,3 +18,8 @@ management:
     health:
       probes:
         enabled: true
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}
+

@@ -12,8 +12,8 @@ import com.eazybytes.accounts.mapper.CustomerMapper;
 import com.eazybytes.accounts.repository.AccountsRepository;
 import com.eazybytes.accounts.repository.CustomerRepository;
 import com.eazybytes.accounts.service.ICustomersService;
-import com.eazybytes.accounts.service.client.CardsFeignClient;
-import com.eazybytes.accounts.service.client.LoansFeignClient;
+import com.eazybytes.accounts.service.client.CardsClient;
+import com.eazybytes.accounts.service.client.LoansClient;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,14 +24,10 @@ public class CustomersServiceImpl implements ICustomersService {
 
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
-    private CardsFeignClient cardsFeignClient;
-    private LoansFeignClient loansFeignClient;
+    private CardsClient cardsClient;
+    private LoansClient loansClient;
 
-    /**
-     * @param mobileNumber - Input Mobile Number
-     *  @param correlationId - Correlation ID value generated at Edge server
-     * @return Customer Details based on a given mobileNumber
-     */
+
     @Override
     public CustomerDetailsDto fetchCustomerDetails(String mobileNumber, String correlationId) {
         Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(
@@ -44,17 +40,14 @@ public class CustomersServiceImpl implements ICustomersService {
         CustomerDetailsDto customerDetailsDto = CustomerMapper.mapToCustomerDetailsDto(customer, new CustomerDetailsDto());
         customerDetailsDto.setAccountsDto(AccountsMapper.mapToAccountsDto(accounts, new AccountsDto()));
 
-        ResponseEntity<LoansDto> loansDtoResponseEntity = loansFeignClient.fetchLoanDetails(correlationId, mobileNumber);
-        if(null != loansDtoResponseEntity) {
+        ResponseEntity<LoansDto> loansDtoResponseEntity = loansClient.fetchLoanDetails(correlationId,mobileNumber);
+        if(loansDtoResponseEntity != null) {
             customerDetailsDto.setLoansDto(loansDtoResponseEntity.getBody());
         }
-
-        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsFeignClient.fetchCardDetails(correlationId, mobileNumber);
-        if(null != cardsDtoResponseEntity) {
+        ResponseEntity<CardsDto> cardsDtoResponseEntity = cardsClient.fetchCardDetails(correlationId,mobileNumber);
+        if (cardsDtoResponseEntity != null) {
             customerDetailsDto.setCardsDto(cardsDtoResponseEntity.getBody());
         }
-
-
         return customerDetailsDto;
 
     }
