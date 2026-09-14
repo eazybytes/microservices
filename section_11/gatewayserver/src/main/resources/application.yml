@@ -1,6 +1,8 @@
 spring:
   application:
-    name: "gatewayserver"
+    name: gatewayserver
+  reactor:
+    context-propagation: auto
   config:
     import: "optional:configserver:http://localhost:8071/"
   cloud:
@@ -20,7 +22,6 @@ spring:
       host: localhost
       port: 6379
       timeout: 1s
-
 management:
   endpoints:
     web:
@@ -32,10 +33,29 @@ management:
   info:
     env:
       enabled: true
+  opentelemetry:
+    resource-attributes:
+      service.name: ${spring.application.name}
+      deployment.environment: "development"
+    logging:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/logs
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+        step: 10s
   metrics:
     tags:
       application: ${spring.application.name}
-
 info:
   app:
     name: "gatewayserver"
@@ -43,12 +63,12 @@ info:
     version: "1.0.0"
 
 logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) %magenta([traceId=%X{traceId:-},spanId=%X{spanId:-}]) - %cyan(%msg%n)}
   level:
     com:
       eazybytes:
-        gatewayserver: DEBUG
-  pattern:
-    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+            gatewayserver: DEBUG
 
 resilience4j.circuitbreaker:
   configs:
@@ -57,4 +77,3 @@ resilience4j.circuitbreaker:
       permittedNumberOfCallsInHalfOpenState: 2
       failureRateThreshold: 50
       waitDurationInOpenState: 10000
-

@@ -16,7 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Tag(
         name = "REST API for Customers in EazyBank",
@@ -54,17 +58,13 @@ public class CustomerController {
     }
     )
     @GetMapping("/fetchCustomerDetails")
-    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestHeader("eazybank-correlation-id")
-                                                                       String correlationId,
-                                                                    @RequestParam @Pattern(regexp="(^$|[0-9]{10})",
-                                                                            message = "Mobile number must be 10 digits")
-                                                                   String mobileNumber) {
-        logger.debug("fetchCustomerDetails method start");
-        CustomerDetailsDto customerDetailsDto = iCustomersService.fetchCustomerDetails(mobileNumber, correlationId);
-        logger.debug("fetchCustomerDetails method end");
+    public ResponseEntity<CustomerDetailsDto> fetchCustomerDetails(@RequestParam
+    @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+    String mobileNumber){
+        logger.info("Fetching customer details for mobileNumber: {}", mobileNumber);
+        CustomerDetailsDto customerDetailsDto = iCustomersService.fetchCustomerDetails(mobileNumber);
+        logger.info("Successfully fetched customer details for mobileNumber: {}", mobileNumber);
         return ResponseEntity.status(HttpStatus.SC_OK).body(customerDetailsDto);
-
     }
-
 
 }
