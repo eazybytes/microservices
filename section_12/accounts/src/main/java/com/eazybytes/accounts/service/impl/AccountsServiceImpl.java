@@ -12,7 +12,10 @@ import com.eazybytes.accounts.mapper.CustomerMapper;
 import com.eazybytes.accounts.repository.AccountsRepository;
 import com.eazybytes.accounts.repository.CustomerRepository;
 import com.eazybytes.accounts.service.IAccountsService;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -21,24 +24,28 @@ import java.util.Random;
 
 @Service
 @AllArgsConstructor
-public class AccountsServiceImpl  implements IAccountsService {
+public class AccountsServiceImpl implements IAccountsService {
+
+    private static final Logger logger = LoggerFactory.getLogger(AccountsServiceImpl.class);
 
     private AccountsRepository accountsRepository;
     private CustomerRepository customerRepository;
+    private MeterRegistry meterRegistry;
 
-    /**
-     * @param customerDto - CustomerDto Object
-     */
     @Override
     public void createAccount(CustomerDto customerDto) {
         Customer customer = CustomerMapper.mapToCustomer(customerDto, new Customer());
         Optional<Customer> optionalCustomer = customerRepository.findByMobileNumber(customerDto.getMobileNumber());
         if(optionalCustomer.isPresent()) {
+            logger.warn("Customer already registered with mobileNumber: {}", customerDto.getMobileNumber());
             throw new CustomerAlreadyExistsException("Customer already registered with given mobileNumber "
-                    +customerDto.getMobileNumber());
+                    + customerDto.getMobileNumber());
         }
         Customer savedCustomer = customerRepository.save(customer);
-        accountsRepository.save(createNewAccount(savedCustomer));
+        Accounts newAccount = accountsRepository.save(createNewAccount(savedCustomer));
+        logger.debug("Created new account with accountNumber: {} for customerId: {}",
+                newAccount.getAccountNumber(), savedCustomer.getCustomerId());
+        meterRegistry.counter("accounts.operations", "operation", "created").increment();
     }
 
     /**
@@ -49,7 +56,6 @@ public class AccountsServiceImpl  implements IAccountsService {
         Accounts newAccount = new Accounts();
         newAccount.setCustomerId(customer.getCustomerId());
         long randomAccNumber = 1000000000L + new Random().nextInt(900000000);
-
         newAccount.setAccountNumber(randomAccNumber);
         newAccount.setAccountType(AccountsConstants.SAVINGS);
         newAccount.setBranchAddress(AccountsConstants.ADDRESS);
@@ -82,6 +88,7 @@ public class AccountsServiceImpl  implements IAccountsService {
         boolean isUpdated = false;
         AccountsDto accountsDto = customerDto.getAccountsDto();
         if(accountsDto !=null ){
+            logger.debug("Updating account with accountNumber: {}", accountsDto.getAccountNumber());
             Accounts accounts = accountsRepository.findById(accountsDto.getAccountNumber()).orElseThrow(
                     () -> new ResourceNotFoundException("Account", "AccountNumber", accountsDto.getAccountNumber().toString())
             );
@@ -96,6 +103,7 @@ public class AccountsServiceImpl  implements IAccountsService {
             customerRepository.save(customer);
             isUpdated = true;
         }
+        meterRegistry.counter("accounts.operations", "operation", "updated").increment();
         return  isUpdated;
     }
 
@@ -110,8 +118,9 @@ public class AccountsServiceImpl  implements IAccountsService {
         );
         accountsRepository.deleteByCustomerId(customer.getCustomerId());
         customerRepository.deleteById(customer.getCustomerId());
+        logger.debug("Deleted account and customer records for customerId: {}", customer.getCustomerId());
+        meterRegistry.counter("accounts.operations", "operation", "deleted").increment();
         return true;
     }
-
 
 }
