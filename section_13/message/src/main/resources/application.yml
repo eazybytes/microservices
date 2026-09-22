@@ -1,9 +1,6 @@
-server:
-  port: 9010
-
 spring:
   application:
-    name: "message"
+    name: message
   cloud:
     function:
       definition: email|sms
@@ -20,3 +17,9 @@ spring:
     username: guest
     password: guest
     connection-timeout: 10s
+server:
+  port: 9010
+
+logging:
+  pattern:
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) - %cyan(%msg%n)}

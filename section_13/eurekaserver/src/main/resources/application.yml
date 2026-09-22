@@ -1,6 +1,6 @@
 spring:
   application:
-    name: "eurekaserver"
+    name: eurekaserver
   config:
     import: "optional:configserver:http://localhost:8071/"
 
@@ -18,10 +18,30 @@ management:
     health:
       probes:
         enabled: true
+  opentelemetry:
+    resource-attributes:
+      service.name: ${spring.application.name}
+      deployment.environment: "development"
+    logging:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/logs
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+        step: 10s
   metrics:
     tags:
       application: ${spring.application.name}
-
 logging:
   pattern:
-    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) %magenta([traceId=%X{traceId:-},spanId=%X{spanId:-}]) - %cyan(%msg%n)}
+

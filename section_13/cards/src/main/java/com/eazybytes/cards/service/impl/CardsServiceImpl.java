@@ -8,7 +8,10 @@ import com.eazybytes.cards.exception.ResourceNotFoundException;
 import com.eazybytes.cards.mapper.CardsMapper;
 import com.eazybytes.cards.repository.CardsRepository;
 import com.eazybytes.cards.service.ICardsService;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,7 +21,10 @@ import java.util.Random;
 @AllArgsConstructor
 public class CardsServiceImpl implements ICardsService {
 
+    private static final Logger logger = LoggerFactory.getLogger(CardsServiceImpl.class);
+
     private CardsRepository cardsRepository;
+    private MeterRegistry meterRegistry;
 
     /**
      * @param mobileNumber - Mobile Number of the Customer
@@ -27,9 +33,13 @@ public class CardsServiceImpl implements ICardsService {
     public void createCard(String mobileNumber) {
         Optional<Cards> optionalCards= cardsRepository.findByMobileNumber(mobileNumber);
         if(optionalCards.isPresent()){
+            logger.warn("Card already registered with mobileNumber: {}", mobileNumber);
             throw new CardAlreadyExistsException("Card already registered with given mobileNumber "+mobileNumber);
         }
-        cardsRepository.save(createNewCard(mobileNumber));
+        Cards newCard = cardsRepository.save(createNewCard(mobileNumber));
+        logger.debug("Created new card with cardNumber: {} for mobileNumber: {}",
+                newCard.getCardNumber(), mobileNumber);
+        meterRegistry.counter("cards.operations", "operation", "created").increment();
     }
 
     /**
@@ -72,6 +82,8 @@ public class CardsServiceImpl implements ICardsService {
                 () -> new ResourceNotFoundException("Card", "CardNumber", cardsDto.getCardNumber()));
         CardsMapper.mapToCards(cardsDto, cards);
         cardsRepository.save(cards);
+        logger.debug("Updated card with cardNumber: {}", cardsDto.getCardNumber());
+        meterRegistry.counter("cards.operations", "operation", "updated").increment();
         return  true;
     }
 
@@ -85,6 +97,8 @@ public class CardsServiceImpl implements ICardsService {
                 () -> new ResourceNotFoundException("Card", "mobileNumber", mobileNumber)
         );
         cardsRepository.deleteById(cards.getCardId());
+        logger.debug("Deleted card with cardNumber: {}", cards.getCardNumber());
+        meterRegistry.counter("cards.operations", "operation", "deleted").increment();
         return true;
     }
 
