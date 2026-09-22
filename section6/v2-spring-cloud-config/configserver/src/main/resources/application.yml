@@ -16,6 +16,9 @@ spring:
           timeout: 5
           clone-on-start: true
           force-pull: true
+        monitor:
+          validation-filter-enabled: false
+
   rabbitmq:
     host: "localhost"
     port: 5672
