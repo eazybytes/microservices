@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: message-deployment
+  namespace: eazybank
+  labels:
+    app: message
+    app.kubernetes.io/name: message
+    app.kubernetes.io/part-of: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: message
+  template:
+    metadata:
+      labels:
+        app: message
+        app.kubernetes.io/name: message
+        app.kubernetes.io/part-of: eazybank
+    spec:
+      containers:
+      - name: message
+        image: eazybytes/message:s14
+        imagePullPolicy: Always
+        env:
+        - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: KAFKA_BROKER
+        resources:
+          requests:
+            cpu: 250m
+            memory: 384Mi
+          limits:
+            cpu: 500m
+            memory: 700Mi

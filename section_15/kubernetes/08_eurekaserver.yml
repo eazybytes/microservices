@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eurekaserver-deployment
+  namespace: eazybank
+  labels:
+    app: eurekaserver
+    app.kubernetes.io/name: eurekaserver
+    app.kubernetes.io/part-of: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eurekaserver
+  template:
+    metadata:
+      labels:
+        app: eurekaserver
+        app.kubernetes.io/name: eurekaserver
+        app.kubernetes.io/part-of: eazybank
+    spec:
+      containers:
+      - name: eurekaserver
+        image: eazybytes/eurekaserver:s14
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8070
+        env:
+        - name: SPRING_CONFIG_IMPORT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: SPRING_CONFIG_IMPORT
+        - name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_TRACES_ENDPOINT
+        - name: MANAGEMENT_OPENTELEMETRY_LOGGING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_LOGS_ENDPOINT
+        - name: MANAGEMENT_OTLP_METRICS_EXPORT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_METRICS_ENDPOINT
+        resources:
+          requests:
+            cpu: 250m
+            memory: 384Mi
+          limits:
+            cpu: 500m
+            memory: 700Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8070
+          failureThreshold: 30
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8070
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8070
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eurekaserver
+  namespace: eazybank
+  labels:
+    app: eurekaserver
+    app.kubernetes.io/name: eurekaserver
+    app.kubernetes.io/part-of: eazybank
+spec:
+  selector:
+    app: eurekaserver
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8070
+      targetPort: 8070

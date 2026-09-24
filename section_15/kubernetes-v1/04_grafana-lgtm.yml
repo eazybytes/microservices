@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-lgtm-deployment
+  namespace: eazybank
+  labels:
+    app: grafana-lgtm
+    app.kubernetes.io/name: grafana-lgtm
+    app.kubernetes.io/part-of: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-lgtm
+  template:
+    metadata:
+      labels:
+        app: grafana-lgtm
+        app.kubernetes.io/name: grafana-lgtm
+        app.kubernetes.io/part-of: eazybank
+    spec:
+      containers:
+        - name: grafana-lgtm
+          image: grafana/otel-lgtm:0.29.2
+          ports:
+            - name: ui
+              containerPort: 3000
+            - name: otlp-grpc
+              containerPort: 4317
+            - name: otlp-http
+              containerPort: 4318
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 1
+              memory: 1536Mi
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            failureThreshold: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-lgtm
+  namespace: eazybank
+  labels:
+    app: grafana-lgtm
+    app.kubernetes.io/name: grafana-lgtm
+    app.kubernetes.io/part-of: eazybank
+spec:
+  selector:
+    app: grafana-lgtm
+  type: LoadBalancer
+  ports:
+    - name: ui
+      port: 3000
+      targetPort: 3000
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318

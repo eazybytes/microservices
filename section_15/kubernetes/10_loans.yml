@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loans-deployment
+  namespace: eazybank
+  labels:
+    app: loans
+    app.kubernetes.io/name: loans
+    app.kubernetes.io/part-of: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loans
+  template:
+    metadata:
+      labels:
+        app: loans
+        app.kubernetes.io/name: loans
+        app.kubernetes.io/part-of: eazybank
+    spec:
+      containers:
+      - name: loans
+        image: eazybytes/loans:s14
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8090
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: SPRING_PROFILES_ACTIVE
+        - name: SPRING_CONFIG_IMPORT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: SPRING_CONFIG_IMPORT
+        - name: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        - name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_TRACES_ENDPOINT
+        - name: MANAGEMENT_OPENTELEMETRY_LOGGING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_LOGS_ENDPOINT
+        - name: MANAGEMENT_OTLP_METRICS_EXPORT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_METRICS_ENDPOINT
+        resources:
+          requests:
+            cpu: 250m
+            memory: 384Mi
+          limits:
+            cpu: 500m
+            memory: 700Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8090
+          failureThreshold: 30
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8090
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8090
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loans
+  namespace: eazybank
+  labels:
+    app: loans
+    app.kubernetes.io/name: loans
+    app.kubernetes.io/part-of: eazybank
+spec:
+  selector:
+    app: loans
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 8090
+      targetPort: 8090

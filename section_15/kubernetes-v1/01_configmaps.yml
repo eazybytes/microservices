@@ -2,16 +2,17 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: eazybank-configmap
+  namespace: eazybank
+  labels:
+    app.kubernetes.io/part-of: eazybank
 data:
   SPRING_PROFILES_ACTIVE: "prod"
   SPRING_CONFIG_IMPORT: "configserver:http://configserver:8071/"
   EUREKA_CLIENT_SERVICEURL_DEFAULTZONE: "http://eurekaserver:8070/eureka/"
-  CONFIGSERVER_APPLICATION_NAME: "configserver"
-  EUREKA_APPLICATION_NAME: "eurekaserver"
-  ACCOUNTS_APPLICATION_NAME: "accounts"
-  LOANS_APPLICATION_NAME: "loans"
-  CARDS_APPLICATION_NAME: "cards"
-  GATEWAY_APPLICATION_NAME: "gatewayserver"
-  KC_BOOTSTRAP_ADMIN_USERNAME: "admin"
-  KC_BOOTSTRAP_ADMIN_PASSWORD: "admin"
   SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI: "http://keycloak:7080/realms/master/protocol/openid-connect/certs"
+  KAFKA_BROKER: "kafka:9092"
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  OTLP_TRACES_ENDPOINT: "http://grafana-lgtm:4318/v1/traces"
+  OTLP_LOGS_ENDPOINT: "http://grafana-lgtm:4318/v1/logs"
+  OTLP_METRICS_ENDPOINT: "http://grafana-lgtm:4318/v1/metrics"

@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: configserver-deployment
+  namespace: eazybank
+  labels:
+    app: configserver
+    app.kubernetes.io/name: configserver
+    app.kubernetes.io/part-of: eazybank
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: configserver
+  template:
+    metadata:
+      labels:
+        app: configserver
+        app.kubernetes.io/name: configserver
+        app.kubernetes.io/part-of: eazybank
+    spec:
+      containers:
+      - name: configserver
+        image: eazybytes/configserver:s14
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8071
+        env:
+        - name: MANAGEMENT_OPENTELEMETRY_TRACING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_TRACES_ENDPOINT
+        - name: MANAGEMENT_OPENTELEMETRY_LOGGING_EXPORT_OTLP_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_LOGS_ENDPOINT
+        - name: MANAGEMENT_OTLP_METRICS_EXPORT_URL
+          valueFrom:
+            configMapKeyRef:
+              name: eazybank-configmap
+              key: OTLP_METRICS_ENDPOINT
+        resources:
+          requests:
+            cpu: 250m
+            memory: 384Mi
+          limits:
+            cpu: 500m
+            memory: 700Mi
+        startupProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8071
+          failureThreshold: 30
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8071
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8071
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: configserver
+  namespace: eazybank
+  labels:
+    app: configserver
+    app.kubernetes.io/name: configserver
+    app.kubernetes.io/part-of: eazybank
+spec:
+  selector:
+    app: configserver
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 8071
+      targetPort: 8071
