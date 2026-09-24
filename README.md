@@ -135,30 +135,46 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 
 |     Kubernetes Command       |     Description          |
 | ------------- | ------------- |
-| "kubectl apply -f filename" | To create a deployment/service/configmap based on a given YAML file |
-| "kubectl get all" | To get all the components inside your cluster |
-| "kubectl get pods" | To get all the pods details inside your cluster |
-| "kubectl get pod pod-id" | To get the details of a given pod id |
-| "kubectl describe pod pod-id" | To get more details of a given pod id |
-| "kubectl delete pod pod-id" | To delete a given pod from cluster |
-| "kubectl get services" | To get all the services details inside your cluster |
-| "kubectl get service service-id" | To get the details of a given service id |
-| "kubectl describe service service-id" | To get more details of a given service id |
-| "kubectl get nodes" | To get all the node details inside your cluster |
-| "kubectl get node node-id" | To get the details of a given node |
-| "kubectl get replicasets" | To get all the replica sets details inside your cluster |
-| "kubectl get replicaset replicaset-id" | To get the details of a given replicaset |
-| "kubectl get deployments" | To get all the deployments details inside your cluster |
-| "kubectl get deployment deployment-id" | To get the details of a given deployment |
-| "kubectl get configmaps" | To get all the configmap details inside your cluster |
-| "kubectl get configmap configmap-id" | To get the details of a given configmap |
-| "kubectl get events --sort-by=.metadata.creationTimestamp" | To get all the events occured inside your cluster |
-| "kubectl scale deployment accounts-deployment --replicas=1" | To set the number of replicas for a deployment inside your cluster |
-| "kubectl set image deployment gatewayserver-deployment gatewayserver=eazybytes/gatewayserver:s11 --record" | To set a new image for a deployment inside your cluster |
-| "kubectl rollout history deployment gatewayserver-deployment" | To know the rollout history for a deployment inside your cluster |
-| "kubectl rollout undo deployment gatewayserver-deployment --to-revision=1" | To rollback to a given revision for a deployment inside your cluster |
-| "kubectl get pvc" | To list the pvcs inside your cluster |
-| "kubectl delete pvc data-happy-panda-mariadb-0" | To delete a pvc inside your cluster |
+| "kubectl config get-contexts" | To list the contexts (clusters that kubectl can talk to) |
+| "kubectl config get-clusters" | To list the clusters that kubectl knows about |
+| "kubectl config use-context [CONTEXT_NAME]" | To switch kubectl to a given context |
+| "kubectl get nodes" | To list the nodes inside your cluster |
+| "kubectl get nodes -o wide" | To list the nodes with extra details, including each node's internal IP |
+| "kubectl get namespaces" | To list all the namespaces inside your cluster |
+| "kubectl create namespace [NAMESPACE]" | To create a namespace imperatively |
+| "kubectl describe namespace [NAMESPACE]" | To show detailed information about a given namespace |
+| "kubectl get namespaces -l [LABEL_KEY]=[LABEL_VALUE]" | To find namespaces by label |
+| "kubectl delete namespace [NAMESPACE]" | To delete a namespace along with everything inside it |
+| "kubectl apply -f [FILE_NAME]" | To create or update the K8s objects defined in a given YAML file |
+| "kubectl apply -f [FILE_NAME_1] -f [FILE_NAME_2]" | To create or update the K8s objects defined in multiple YAML files in one command |
+| "kubectl get configmaps -n [NAMESPACE]" | To list the ConfigMaps inside a namespace |
+| "kubectl describe configmap [CONFIGMAP_NAME] -n [NAMESPACE]" | To show the details of a given ConfigMap |
+| "kubectl get secrets -n [NAMESPACE]" | To list the Secrets inside a namespace |
+| "kubectl describe secret [SECRET_NAME] -n [NAMESPACE]" | To show the details of a given Secret (values stay hidden) |
+| "kubectl get secret [SECRET_NAME] -n [NAMESPACE] -o yaml" | To show the full Secret object, including the Base64-encoded values |
+| "kubectl get deployments -n [NAMESPACE]" | To list the Deployments inside a namespace |
+| "kubectl get replicasets -n [NAMESPACE]" | To list the ReplicaSets inside a namespace |
+| "kubectl get pods -n [NAMESPACE]" | To list the pods inside a namespace |
+| "kubectl get pods -n [NAMESPACE] -o wide" | To list the pods with extra details, like the node and pod IP |
+| "kubectl get pods -n [NAMESPACE] -w" | To watch pod status changes live (Ctrl+C to stop) |
+| "kubectl describe pod [POD_NAME] -n [NAMESPACE]" | To show the details of a given pod, including the Events section |
+| "kubectl delete pod [POD_NAME] -n [NAMESPACE]" | To delete a given pod (useful to watch self-healing) |
+| "kubectl logs [POD_NAME] -n [NAMESPACE]" | To view the container logs of a given pod |
+| "kubectl logs deploy/[DEPLOYMENT_NAME] -n [NAMESPACE]" | To view the container logs of a pod belonging to a given Deployment |
+| "kubectl logs -f deploy/[DEPLOYMENT_NAME] -n [NAMESPACE]" | To follow the container logs of a pod belonging to a given Deployment |
+| "kubectl exec -it deploy/[DEPLOYMENT_NAME] -n [NAMESPACE] -- [COMMAND]" | To run a command inside a container of a given Deployment |
+| "kubectl get services -n [NAMESPACE]" | To list the Services inside a namespace, including their types and external IPs |
+| "kubectl describe service [SERVICE_NAME] -n [NAMESPACE]" | To show the details of a given Service, including its endpoints |
+| "kubectl port-forward service/[SERVICE_NAME] [LOCAL_PORT]:[SERVICE_PORT] -n [NAMESPACE]" | To forward a local port to a given Service |
+| "kubectl get all -n [NAMESPACE] -l [LABEL_KEY]=[LABEL_VALUE]" | To list all the components inside a namespace matching a given label |
+| "kubectl get events -n [NAMESPACE]" | To list the events that occurred inside a namespace |
+| "kubectl get events -n [NAMESPACE] --sort-by=.metadata.creationTimestamp" | To list the events sorted by creation time, so the latest appear last |
+| "kubectl rollout status deployment/[DEPLOYMENT_NAME] -n [NAMESPACE]" | To wait for the rollout of a given Deployment to complete |
+| "kubectl rollout history deployment/[DEPLOYMENT_NAME] -n [NAMESPACE]" | To show the revision history of a given Deployment |
+| "kubectl annotate deployment/[DEPLOYMENT_NAME] kubernetes.io/change-cause=\"[MESSAGE]\" -n [NAMESPACE]" | To record a note about a change (shown in the CHANGE-CAUSE column of the rollout history) |
+| "kubectl rollout undo deployment/[DEPLOYMENT_NAME] -n [NAMESPACE]" | To roll back a given Deployment to its previous revision |
+| "kubectl rollout undo deployment/[DEPLOYMENT_NAME] --to-revision=[REVISION] -n [NAMESPACE]" | To roll back a given Deployment to a specific revision |
+| "kubectl run [POD_NAME] --rm -it --image=[IMAGE] -n [NAMESPACE] -- sh" | To start a temporary pod with a shell, deleted automatically on exit |
 
 ## Helm Commands used in the course
 
