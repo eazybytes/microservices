@@ -1,0 +1,6 @@
+apiVersion: v2
+name: eazybank-common
+description: Shared Deployment/Service/ConfigMap templates for eazybank microservice charts
+type: library
+version: 0.1.0
+appVersion: "s14"

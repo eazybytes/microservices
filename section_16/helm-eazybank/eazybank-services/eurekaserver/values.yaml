@@ -1,0 +1,35 @@
+deploymentName: eurekaserver-deployment
+serviceName: eurekaserver
+appLabel: eurekaserver
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/eurekaserver
+  tag: s14
+
+containerPort: 8070
+
+service:
+  port: 8070
+  targetPort: 8070
+
+profileEnabled: false
+configImportEnabled: true
+eurekaEnabled: false
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: false
+otelEnabled: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5

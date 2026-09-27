@@ -1,6 +1,0 @@
-apiVersion: v2
-name: kafka
-description: A simple Helm chart for Apache Kafka in KRaft mode
-type: application
-version: 1.0.0
-appVersion: "4.1.0"

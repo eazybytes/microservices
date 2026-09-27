@@ -1,0 +1,41 @@
+# Standalone defaults for this chart's own values. Note: rendering still
+# requires .Values.global to be supplied by a parent chart (eazybank-platform)
+# - see eazybank-common/templates/_deployment.tpl. Installing this chart with
+# `helm install accounts .` and no parent will fail with a clear error rather
+# than silently rendering a broken ConfigMap reference.
+
+deploymentName: accounts-deployment
+serviceName: accounts
+appLabel: accounts
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/accounts
+  tag: s14
+
+containerPort: 8080
+
+service:
+  port: 8080
+  targetPort: 8080
+
+profileEnabled: true
+configImportEnabled: true
+eurekaEnabled: true
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: true
+otelEnabled: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5

@@ -1,0 +1,35 @@
+deploymentName: configserver-deployment
+serviceName: configserver
+appLabel: configserver
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/configserver
+  tag: s14
+
+containerPort: 8071
+
+service:
+  port: 8071
+  targetPort: 8071
+
+profileEnabled: false
+configImportEnabled: false
+eurekaEnabled: false
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: false
+otelEnabled: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5

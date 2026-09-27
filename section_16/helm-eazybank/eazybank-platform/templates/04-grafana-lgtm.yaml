@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-lgtm-deployment
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "eazybank.labels" (dict "ctx" $ "name" "grafana-lgtm") | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana-lgtm
+  template:
+    metadata:
+      labels:
+        {{- include "eazybank.podLabels" (dict "ctx" $ "name" "grafana-lgtm") | nindent 8 }}
+    spec:
+      containers:
+        - name: grafana-lgtm
+          image: {{ .Values.grafanaLgtm.image | quote }}
+          ports:
+            - name: ui
+              containerPort: 3000
+            - name: otlp-grpc
+              containerPort: 4317
+            - name: otlp-http
+              containerPort: 4318
+          resources:
+            {{- toYaml .Values.grafanaLgtm.resources | nindent 12 }}
+          startupProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            failureThreshold: {{ .Values.grafanaLgtm.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.grafanaLgtm.startupProbe.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-lgtm
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "eazybank.labels" (dict "ctx" $ "name" "grafana-lgtm") | nindent 4 }}
+spec:
+  selector:
+    app: grafana-lgtm
+  type: {{ .Values.grafanaLgtm.service.type }}
+  ports:
+    - name: ui
+      port: 3000
+      targetPort: 3000
+    - name: otlp-grpc
+      port: 4317
+      targetPort: 4317
+    - name: otlp-http
+      port: 4318
+      targetPort: 4318

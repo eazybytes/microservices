@@ -1,0 +1,11 @@
+apiVersion: v2
+name: accounts
+description: Accounts microservice
+type: application
+version: 0.1.0
+appVersion: "s14"
+
+dependencies:
+  - name: eazybank-common
+    version: 0.1.0
+    repository: "file://../../eazybank-common"

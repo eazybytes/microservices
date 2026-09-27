@@ -1,6 +1,0 @@
-apiVersion: v2
-name: keycloak
-description: A Helm chart for Keycloak
-type: application
-version: 1.0.0
-appVersion: "26.4.0"

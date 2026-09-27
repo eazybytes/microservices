@@ -1,0 +1,97 @@
+# Default values for the whole platform (the `eazybank` namespace, running
+# the `default` Spring profile).
+#
+# `global.*` is propagated by Helm to every dependency chart automatically
+# (eazybank-common, and every eazybank-services/* chart) - this is the single
+# source of truth those charts read from. Anything NOT under `global` here
+# configures a resource that lives directly in this chart (namespace itself,
+# secrets, the infra pieces).
+#
+# To override a service's own defaults (image tag, replicaCount, resources,
+# probe timing, service type), nest values under that service's dependency name below -
+# e.g. `accounts: {replicaCount: 2}` - exactly like values/values-prod.yaml
+# does. Anything not overridden here falls through to that service chart's
+# own values.yaml.
+
+global:
+  namespace: eazybank
+  # Value of the app.kubernetes.io/part-of label on every resource.
+  partOf: eazybank
+  configMapName: eazybank-configmap
+  # Picks which configserver files each service loads: `default` loads the
+  # base files (accounts.yml, ...). values/values-qa.yaml switches this to qa
+  # and values/values-prod.yaml to prod.
+  springProfilesActive: default
+  springConfigImport: "configserver:http://configserver:8071/"
+  eurekaServiceUrl: "http://eurekaserver:8070/eureka/"
+  jwkSetUri: "http://keycloak:7080/realms/master/protocol/openid-connect/certs"
+  kafkaBroker: "kafka:9092"
+  redisHost: "redis"
+  redisPort: "6379"
+  otlpTracesEndpoint: "http://grafana-lgtm:4318/v1/traces"
+  otlpLogsEndpoint: "http://grafana-lgtm:4318/v1/logs"
+  otlpMetricsEndpoint: "http://grafana-lgtm:4318/v1/metrics"
+
+# Namespace this release creates. Set to false if the namespace already
+# exists and is managed outside this chart.
+namespace:
+  create: true
+
+secrets:
+  keycloakAdminUsername: admin
+  keycloakAdminPassword: admin
+
+redis:
+  image: "redis:7.4-alpine"
+  resources:
+    requests:
+      cpu: 100m
+      memory: 64Mi
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+grafanaLgtm:
+  image: "grafana/otel-lgtm:0.29.2"
+  # Type of the `grafana-lgtm` Service (UI on 3000, OTLP on 4317/4318).
+  service:
+    type: LoadBalancer
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1536Mi
+  startupProbe:
+    failureThreshold: 30
+    periodSeconds: 5
+
+kafka:
+  image: "apache/kafka:4.3.1"
+  clusterId: "MkU3OEVBNTcwNTJENDM2Qk"
+  resources:
+    requests:
+      cpu: 500m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  startupProbe:
+    failureThreshold: 30
+    periodSeconds: 5
+
+keycloak:
+  image: "quay.io/keycloak/keycloak:26.7.0"
+  service:
+    type: LoadBalancer
+  resources:
+    requests:
+      cpu: 250m
+      memory: 512Mi
+    limits:
+      cpu: 1
+      memory: 1Gi
+  startupProbe:
+    failureThreshold: 30
+    periodSeconds: 5

@@ -1,0 +1,39 @@
+apiVersion: v2
+name: eazybank-platform
+description: Top-level umbrella chart - installs the entire eazybank platform (infra + all microservices) in one release
+type: application
+version: 0.1.0
+appVersion: "s14"
+
+dependencies:
+  - name: eazybank-common
+    version: 0.1.0
+    repository: "file://../eazybank-common"
+
+  - name: configserver
+    version: 0.1.0
+    repository: "file://../eazybank-services/configserver"
+
+  - name: eurekaserver
+    version: 0.1.0
+    repository: "file://../eazybank-services/eurekaserver"
+
+  - name: accounts
+    version: 0.1.0
+    repository: "file://../eazybank-services/accounts"
+
+  - name: loans
+    version: 0.1.0
+    repository: "file://../eazybank-services/loans"
+
+  - name: cards
+    version: 0.1.0
+    repository: "file://../eazybank-services/cards"
+
+  - name: gatewayserver
+    version: 0.1.0
+    repository: "file://../eazybank-services/gatewayserver"
+
+  - name: message
+    version: 0.1.0
+    repository: "file://../eazybank-services/message"

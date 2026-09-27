@@ -1,6 +1,0 @@
-apiVersion: v2
-name: grafana
-description: A simple Helm chart for Grafana
-type: application
-version: 1.0.0
-appVersion: "11.4.0"
