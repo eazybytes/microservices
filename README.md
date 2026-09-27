@@ -73,7 +73,6 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - Kubernetes Dashboard - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 - Helm website - https://helm.sh
 - Chocolatey website - https://chocolatey.org/
-- Bitnami Helm charts GitHub repo - https://github.com/bitnami/charts
 - Spring Cloud Kubernetes website - https://spring.io/projects/spring-cloud-kubernetes
 - Spring Cloud Kubernetes Blog - https://spring.io/blog/2021/10/26/new-features-for-spring-cloud-kubernetes-in-spring-cloud-2021-0-0-m3
 - GCP website - https://cloud.google.com
@@ -178,14 +177,26 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 
 ## Helm Commands used in the course
 
+`[CHART]` can be a local chart directory (e.g. `.`) or a remote chart reference (e.g. `oci://ghcr.io/stefanprodan/charts/podinfo`).
+
 |     Helm Command       |     Description          |
 | ------------- | ------------- |
-| "helm create [NAME]" | Create a default chart with the given name |
-| "helm dependencies build" | To recompile the given helm chart |
-| "helm install [NAME] [CHART]" | Install the given helm chart into K8s cluster |
-| "helm upgrade [NAME] [CHART]" | Upgrades a specified release to a new version of a chart |
-| "helm history [NAME]" | Display historical revisions for a given release |
-| "helm rollback [NAME] [REVISION]" | Roll back a release to a previous revision |
-| "helm uninstall [NAME]" | Uninstall all of the resources associated with a given release |
-| "helm template [NAME] [CHART]" | Render chart templates locally along with the values |
-| "helm list" | Lists all of the helm releases inside a K8s cluster |
+| "helm version" | To display the installed Helm client version |
+| "helm search hub [KEYWORD]" | To search Artifact Hub for charts matching a given keyword |
+| "helm show chart [CHART]" | To display the metadata (Chart.yaml) of a given chart |
+| "helm create [CHART_NAME]" | To create a new chart with the default structure and files |
+| "helm dependency list [CHART]" | To list the dependencies (sub-charts) of a given chart and their status |
+| "helm dependency build [CHART]" | To download/package the dependencies of a given chart into its charts/ folder |
+| "helm lint [CHART]" | To check a given chart for errors and best-practice issues |
+| "helm lint [CHART] -f [VALUES_FILE]" | To lint a given chart using the values from a specific values file |
+| "helm template [RELEASE_NAME] [CHART]" | To render the chart templates locally and print the generated K8s manifests |
+| "helm template [RELEASE_NAME] [CHART] --show-only [TEMPLATE_PATH]" | To render only a single template of a given chart |
+| "helm install [RELEASE_NAME] [CHART] --dry-run=server" | To simulate an install, validating the rendered manifests against the K8s cluster without creating anything |
+| "helm install [RELEASE_NAME] [CHART]" | To install a given chart into the K8s cluster as a new release |
+| "helm install [RELEASE_NAME] [CHART] --version [CHART_VERSION] --set [KEY]=[VALUE]" | To install a specific chart version, overriding default values from the command line |
+| "helm list" (or "helm ls") | To list all the Helm releases inside the current namespace |
+| "helm get manifest [RELEASE_NAME]" | To display the K8s manifests deployed by a given release |
+| "helm upgrade [RELEASE_NAME] [CHART]" | To upgrade a given release with the latest changes of a chart |
+| "helm history [RELEASE_NAME]" | To display the revision history of a given release |
+| "helm rollback [RELEASE_NAME] [REVISION]" | To roll back a given release to a previous revision |
+| "helm uninstall [RELEASE_NAME]" | To uninstall a given release and remove all of its K8s resources |
