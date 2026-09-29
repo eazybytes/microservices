@@ -15,8 +15,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
+@Getter
+@Setter
+@ToString
 @EntityListeners(AuditingEntityListener.class)
-@Getter @Setter @ToString
 public class BaseEntity {
 
     @CreatedDate

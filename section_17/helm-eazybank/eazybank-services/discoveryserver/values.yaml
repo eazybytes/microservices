@@ -1,0 +1,45 @@
+# Spring Cloud Kubernetes Discovery Server. It has no registry of its own:
+# it reads Pods/Services/Endpoints from the Kubernetes API (hence the
+# ServiceAccount + Role in templates/rbac.yaml) and serves them over HTTP to
+# services running spring-cloud-starter-kubernetes-discoveryclient.
+# Names match the upstream manifest in the Spring Cloud Kubernetes docs.
+
+deploymentName: spring-cloud-kubernetes-discoveryserver-deployment
+serviceName: spring-cloud-kubernetes-discoveryserver
+appLabel: spring-cloud-kubernetes-discoveryserver
+serviceAccountName: spring-cloud-kubernetes-discoveryserver
+
+replicaCount: 1
+
+image:
+  repository: springcloud/spring-cloud-kubernetes-discoveryserver
+  tag: 3.1.0
+
+containerPort: 8761
+
+# Clients reach it at http://spring-cloud-kubernetes-discoveryserver:80
+# (global.discoveryServerUrl in eazybank-platform/values.yaml).
+service:
+  port: 80
+  targetPort: 8761
+
+# Upstream image - none of the eazybank env vars apply to it.
+profileEnabled: false
+configImportEnabled: false
+discoveryEnabled: false
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: false
+otelEnabled: false
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5

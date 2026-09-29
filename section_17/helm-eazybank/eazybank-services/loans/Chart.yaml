@@ -1,0 +1,11 @@
+apiVersion: v2
+name: loans
+description: Loans microservice
+type: application
+version: 0.1.0
+appVersion: "s17"
+
+dependencies:
+  - name: eazybank-common
+    version: 0.1.0
+    repository: "file://../../eazybank-common"

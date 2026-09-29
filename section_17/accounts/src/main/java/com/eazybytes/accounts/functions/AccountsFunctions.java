@@ -18,7 +18,6 @@ public class AccountsFunctions {
         return accountNumber -> {
             log.info("Updating Communication status for the account number : " + accountNumber.toString());
             accountsService.updateCommunicationStatus(accountNumber);
-        };
+        } ;
     }
-
 }

@@ -14,9 +14,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-/*@ComponentScans({ @ComponentScan("com.eazybytes.cards.controller") })
-@EnableJpaRepositories("com.eazybytes.cards.repository")
-@EntityScan("com.eazybytes.cards.model")*/
 @EnableJpaAuditing(auditorAwareRef = "auditAwareImpl")
 @EnableConfigurationProperties(value = {CardsContactInfoDto.class})
 @OpenAPIDefinition(

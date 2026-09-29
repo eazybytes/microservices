@@ -1,0 +1,11 @@
+apiVersion: v2
+name: discoveryserver
+description: Spring Cloud Kubernetes Discovery Server - service registry backed by the Kubernetes API
+type: application
+version: 0.1.0
+appVersion: "3.1.0"
+
+dependencies:
+  - name: eazybank-common
+    version: 0.1.0
+    repository: "file://../../eazybank-common"

@@ -1,0 +1,29 @@
+deploymentName: message-deployment
+serviceName: message
+appLabel: message
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/message
+  tag: s17
+
+# No containerPort - this service has no HTTP surface (Kafka
+# consumer/producer only), so eazybank-common's deployment template skips
+# ports and probes entirely when this is unset.
+
+profileEnabled: false
+configImportEnabled: false
+discoveryEnabled: false
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: true
+otelEnabled: false
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi

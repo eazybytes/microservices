@@ -8,7 +8,10 @@ import com.eazybytes.loans.exception.ResourceNotFoundException;
 import com.eazybytes.loans.mapper.LoansMapper;
 import com.eazybytes.loans.repository.LoansRepository;
 import com.eazybytes.loans.service.ILoansService;
+import io.micrometer.core.instrument.MeterRegistry;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,7 +21,10 @@ import java.util.Random;
 @AllArgsConstructor
 public class LoansServiceImpl implements ILoansService {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoansServiceImpl.class);
+
     private LoansRepository loansRepository;
+    private MeterRegistry meterRegistry;
 
     /**
      * @param mobileNumber - Mobile Number of the Customer
@@ -27,9 +33,13 @@ public class LoansServiceImpl implements ILoansService {
     public void createLoan(String mobileNumber) {
         Optional<Loans> optionalLoans= loansRepository.findByMobileNumber(mobileNumber);
         if(optionalLoans.isPresent()){
+            logger.warn("Loan already registered with mobileNumber: {}", mobileNumber);
             throw new LoanAlreadyExistsException("Loan already registered with given mobileNumber "+mobileNumber);
         }
-        loansRepository.save(createNewLoan(mobileNumber));
+        Loans newLoan = loansRepository.save(createNewLoan(mobileNumber));
+        logger.debug("Created new loan with loanNumber: {} for mobileNumber: {}",
+                newLoan.getLoanNumber(), mobileNumber);
+        meterRegistry.counter("loans.operations", "operation", "created").increment();
     }
 
     /**
@@ -72,6 +82,8 @@ public class LoansServiceImpl implements ILoansService {
                 () -> new ResourceNotFoundException("Loan", "LoanNumber", loansDto.getLoanNumber()));
         LoansMapper.mapToLoans(loansDto, loans);
         loansRepository.save(loans);
+        logger.debug("Updated loan with loanNumber: {}", loansDto.getLoanNumber());
+        meterRegistry.counter("loans.operations", "operation", "updated").increment();
         return  true;
     }
 
@@ -85,6 +97,8 @@ public class LoansServiceImpl implements ILoansService {
                 () -> new ResourceNotFoundException("Loan", "mobileNumber", mobileNumber)
         );
         loansRepository.deleteById(loans.getLoanId());
+        logger.debug("Deleted loan with loanNumber: {}", loans.getLoanNumber());
+        meterRegistry.counter("loans.operations", "operation", "deleted").increment();
         return true;
     }
 

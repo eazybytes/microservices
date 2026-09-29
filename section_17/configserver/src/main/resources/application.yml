@@ -1,15 +1,11 @@
 spring:
   application:
-    name: "configserver"
+    name: configserver
   profiles:
-    # active: native
-    active: git
+     active: git
   cloud:
     config:
       server:
-        # native:
-          # search-locations: "classpath:/config"
-          # search-locations: "file:///Users//eazybytes//Documents//config"
         git:
           uri: "https://github.com/eazybytes/eazybytes-config.git"
           default-label: main
@@ -31,10 +27,29 @@ management:
     health:
       probes:
         enabled: true
+  opentelemetry:
+    resource-attributes:
+      service.name: ${spring.application.name}
+      deployment.environment: "development"
+    logging:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/logs
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4318/v1/traces
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    metrics:
+      export:
+        url: http://localhost:4318/v1/metrics
+        step: 10s
   metrics:
     tags:
       application: ${spring.application.name}
-
 encrypt:
   key: "45D81EC1EF61DF9AD8D3E5BB397F9"
 
@@ -43,4 +58,4 @@ server:
 
 logging:
   pattern:
-    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+    console: ${CONSOLE_LOG_PATTERN:%green(%d{HH:mm:ss.SSS}) %blue(%-5level) %red([%thread]) %yellow(%logger{15}) %magenta([traceId=%X{traceId:-},spanId=%X{spanId:-}]) - %cyan(%msg%n)}

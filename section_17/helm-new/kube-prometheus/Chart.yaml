@@ -1,6 +1,0 @@
-apiVersion: v2
-name: kube-prometheus
-description: A simple Helm chart for Prometheus monitoring
-type: application
-version: 1.0.0
-appVersion: "v3.1.0"

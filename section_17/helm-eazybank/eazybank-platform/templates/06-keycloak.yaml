@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: keycloak-deployment
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "eazybank.labels" (dict "ctx" $ "name" "keycloak") | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: keycloak
+  template:
+    metadata:
+      labels:
+        {{- include "eazybank.podLabels" (dict "ctx" $ "name" "keycloak") | nindent 8 }}
+    spec:
+      containers:
+        - name: keycloak
+          image: {{ .Values.keycloak.image | quote }}
+          args: ["start-dev"]
+          env:
+            - name: KC_BOOTSTRAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: eazybank-secrets
+                  key: KC_BOOTSTRAP_ADMIN_USERNAME
+            - name: KC_BOOTSTRAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: eazybank-secrets
+                  key: KC_BOOTSTRAP_ADMIN_PASSWORD
+            - name: KC_HEALTH_ENABLED
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: management
+              containerPort: 9000
+          resources:
+            {{- toYaml .Values.keycloak.resources | nindent 12 }}
+          startupProbe:
+            httpGet:
+              path: /health/started
+              port: management
+            failureThreshold: {{ .Values.keycloak.startupProbe.failureThreshold }}
+            periodSeconds: {{ .Values.keycloak.startupProbe.periodSeconds }}
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: management
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: management
+            periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: keycloak
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    {{- include "eazybank.labels" (dict "ctx" $ "name" "keycloak") | nindent 4 }}
+spec:
+  selector:
+    app: keycloak
+  type: {{ .Values.keycloak.service.type }}
+  ports:
+    - name: http
+      port: 7080
+      targetPort: 8080

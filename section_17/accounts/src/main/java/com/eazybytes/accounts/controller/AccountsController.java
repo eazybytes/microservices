@@ -41,7 +41,6 @@ import org.springframework.web.bind.annotation.*;
 public class AccountsController {
 
     private static final Logger logger = LoggerFactory.getLogger(AccountsController.class);
-
     private final IAccountsService iAccountsService;
 
     public AccountsController(IAccountsService iAccountsService) {
@@ -77,7 +76,9 @@ public class AccountsController {
     )
     @PostMapping("/create")
     public ResponseEntity<ResponseDto> createAccount(@Valid @RequestBody CustomerDto customerDto) {
+        logger.info("Creating account for mobileNumber: {}", customerDto.getMobileNumber());
         iAccountsService.createAccount(customerDto);
+        logger.info("Successfully created account for mobileNumber: {}", customerDto.getMobileNumber());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(new ResponseDto(AccountsConstants.STATUS_201, AccountsConstants.MESSAGE_201));
@@ -103,8 +104,9 @@ public class AccountsController {
     )
     @GetMapping("/fetch")
     public ResponseEntity<CustomerDto> fetchAccountDetails(@RequestParam
-                                                               @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                               String mobileNumber) {
+                @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+                String mobileNumber) {
+        logger.info("Fetching account details for mobileNumber: {}", mobileNumber);
         CustomerDto customerDto = iAccountsService.fetchAccount(mobileNumber);
         return ResponseEntity.status(HttpStatus.OK).body(customerDto);
     }
@@ -133,12 +135,15 @@ public class AccountsController {
     )
     @PutMapping("/update")
     public ResponseEntity<ResponseDto> updateAccountDetails(@Valid @RequestBody CustomerDto customerDto) {
+        logger.info("Updating account details for mobileNumber: {}", customerDto.getMobileNumber());
         boolean isUpdated = iAccountsService.updateAccount(customerDto);
-        if(isUpdated) {
+        if (isUpdated) {
+            logger.info("Successfully updated account details for mobileNumber: {}", customerDto.getMobileNumber());
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
-        }else{
+        } else {
+            logger.warn("Failed to update account details for mobileNumber: {}", customerDto.getMobileNumber());
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_UPDATE));
@@ -169,14 +174,17 @@ public class AccountsController {
     )
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseDto> deleteAccountDetails(@RequestParam
-                                                                @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
-                                                                String mobileNumber) {
+            @Pattern(regexp="(^$|[0-9]{10})",message = "Mobile number must be 10 digits")
+            String mobileNumber) {
+        logger.info("Deleting account details for mobileNumber: {}", mobileNumber);
         boolean isDeleted = iAccountsService.deleteAccount(mobileNumber);
-        if(isDeleted) {
+        if (isDeleted) {
+            logger.info("Successfully deleted account details for mobileNumber: {}", mobileNumber);
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(new ResponseDto(AccountsConstants.STATUS_200, AccountsConstants.MESSAGE_200));
-        }else{
+        } else {
+            logger.warn("Failed to delete account details for mobileNumber: {}", mobileNumber);
             return ResponseEntity
                     .status(HttpStatus.EXPECTATION_FAILED)
                     .body(new ResponseDto(AccountsConstants.STATUS_417, AccountsConstants.MESSAGE_417_DELETE));
@@ -201,13 +209,13 @@ public class AccountsController {
             )
     }
     )
-    @Retry(name = "getBuildInfo",fallbackMethod = "getBuildInfoFallback")
+    @Retry(name="getBuildInfo", fallbackMethod = "getBuildInfoFallback")
     @GetMapping("/build-info")
     public ResponseEntity<String> getBuildInfo() {
         logger.debug("getBuildInfo() method Invoked");
         return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body(buildVersion);
+                .status(HttpStatus.OK)
+                .body(buildVersion);
     }
 
     public ResponseEntity<String> getBuildInfoFallback(Throwable throwable) {
@@ -235,7 +243,7 @@ public class AccountsController {
             )
     }
     )
-    @RateLimiter(name= "getJavaVersion", fallbackMethod = "getJavaVersionFallback")
+    @RateLimiter(name= "getJavaVersion",fallbackMethod = "getJavaVersionFallback")
     @GetMapping("/java-version")
     public ResponseEntity<String> getJavaVersion() {
         return ResponseEntity
@@ -246,7 +254,7 @@ public class AccountsController {
     public ResponseEntity<String> getJavaVersionFallback(Throwable throwable) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("Java 21");
+                .body("Java 25");
     }
 
     @Operation(
@@ -273,6 +281,4 @@ public class AccountsController {
                 .status(HttpStatus.OK)
                 .body(accountsContactInfoDto);
     }
-
-
 }

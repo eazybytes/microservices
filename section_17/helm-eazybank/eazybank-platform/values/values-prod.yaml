@@ -1,0 +1,41 @@
+# Prod environment overrides. Merge on top of ../values.yaml. Run from the
+# chart root (eazybank-platform/):
+#   helm dependency build .
+#   helm install eazybank-prod . -f values/values-prod.yaml --namespace eazybank-prod --create-namespace
+#
+# Only deltas from the defaults are listed here.
+
+global:
+  namespace: eazybank-prod
+  configMapName: eazybank-configmap
+  # Matches the prod-profile config files already served by configserver
+  # (accounts-prod.yml, loans-prod.yml, cards-prod.yml).
+  springProfilesActive: prod
+
+# The install command's --create-namespace also creates this namespace (and
+# stores the release record in it). With create: true the chart creates it as
+# well: Helm 4 takes ownership, so `helm uninstall` deletes the namespace too.
+# Helm 3 fails with "already exists" - set this to false there, or to keep the
+# namespace after uninstall.
+namespace:
+  create: true
+
+# Per-service overrides are nested under each service's dependency name -
+# Helm merges these into that subchart's own values.yaml at render time.
+# Run more than one pod per stateless service. Under CPU contention, cold JVM
+# starts can take 150s+ - give accounts extra headroom on top of the shared
+# default.
+accounts:
+  replicaCount: 2
+  startupProbe:
+    failureThreshold: 60
+    periodSeconds: 5
+
+loans:
+  replicaCount: 2
+
+cards:
+  replicaCount: 2
+
+gatewayserver:
+  replicaCount: 2

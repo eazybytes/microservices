@@ -1,0 +1,25 @@
+# QA environment overrides. Merge on top of ../values.yaml. Run from the
+# chart root (eazybank-platform/):
+#   helm dependency build .
+#   helm install eazybank-qa . -f values/values-qa.yaml --namespace eazybank-qa --create-namespace
+#
+# Only deltas from the defaults are listed here - everything else (image
+# tags, resource sizing, probe timings, per-service replica counts) is
+# inherited from ../values.yaml and each eazybank-services/* chart's own
+# values.yaml.
+
+global:
+  namespace: eazybank-qa
+  configMapName: eazybank-configmap
+  # Matches the qa-profile config files already served by configserver
+  # (accounts-qa.yml, loans-qa.yml, cards-qa.yml).
+  springProfilesActive: qa
+
+# The install command's --create-namespace also creates this namespace (and
+# stores the release record in it). With create: true the chart creates it as
+# well: Helm 4 takes ownership, so `helm uninstall` deletes the namespace too.
+# Helm 3 fails with "already exists" - set this to false there, or to keep the
+# namespace after uninstall.
+namespace:
+  create: true
+

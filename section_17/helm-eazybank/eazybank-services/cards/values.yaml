@@ -1,0 +1,35 @@
+deploymentName: cards-deployment
+serviceName: cards
+appLabel: cards
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/cards
+  tag: s17
+
+containerPort: 9000
+
+service:
+  port: 9000
+  targetPort: 9000
+
+profileEnabled: true
+configImportEnabled: true
+discoveryEnabled: true
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: false
+otelEnabled: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5

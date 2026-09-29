@@ -1,0 +1,35 @@
+deploymentName: loans-deployment
+serviceName: loans
+appLabel: loans
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/loans
+  tag: s17
+
+containerPort: 8090
+
+service:
+  port: 8090
+  targetPort: 8090
+
+profileEnabled: true
+configImportEnabled: true
+discoveryEnabled: true
+jwkEnabled: false
+redisEnabled: false
+kafkaEnabled: false
+otelEnabled: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5

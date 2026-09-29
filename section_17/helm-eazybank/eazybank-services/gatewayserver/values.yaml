@@ -1,0 +1,36 @@
+deploymentName: gatewayserver-deployment
+serviceName: gatewayserver
+appLabel: gatewayserver
+
+replicaCount: 1
+
+image:
+  repository: eazybytes/gatewayserver
+  tag: s17
+
+containerPort: 8072
+
+service:
+  type: LoadBalancer
+  port: 8072
+  targetPort: 8072
+
+profileEnabled: true
+configImportEnabled: true
+discoveryEnabled: true
+jwkEnabled: true
+redisEnabled: true
+kafkaEnabled: false
+otelEnabled: true
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 384Mi
+  limits:
+    cpu: 500m
+    memory: 700Mi
+
+startupProbe:
+  failureThreshold: 30
+  periodSeconds: 5
