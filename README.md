@@ -111,7 +111,8 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "docker compose stop" | Stops running containers without removing them |
 | "docker run -p 3306:3306 --name accountsdb -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=accountsdb -d mysql" | To create a MySQL DB container |
 | "docker run -p 6379:6379 --name eazyredis -d redis" | To create a Redis Container |
-| "docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:22.0.3 start-dev" | To create Keycloak Container|
+| "docker run -d -p 3000:3000 -p 4317:4317 -p 4318:4318 grafana/otel-lgtm" | To create LGTM Container|
+| "docker run -d -p 127.0.0.1:7080:8080 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=admin -v keycloak_data:/opt/keycloak/data quay.io/keycloak/keycloak:26.7.3 start-dev" | To create Keycloak Container|
 
 
 ## hey command used in the course
