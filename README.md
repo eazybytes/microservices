@@ -1,6 +1,6 @@
 # Master Microservices with Spring Boot, Docker, Kubernetes
 
-[![Image](https://github.com/eazybytes/microservices/blob/3.2.0/Microservice.png "Master Microservices with Java, Spring, Docker, Kubernetes")](https://www.udemy.com/course/master-microservices-with-spring-docker-kubernetes/?referralCode=9365DB9B7EE637F629A9)
+[![Image](https://github.com/eazybytes/microservices/blob/4.1.0/Microservice.png "Master Microservices with Java, Spring, Docker, Kubernetes")](https://www.udemy.com/course/master-microservices-with-spring-docker-kubernetes/?referralCode=9365DB9B7EE637F629A9)
 
 Learn how to create enterprise and production ready Microservices with Spring, Spring Cloud, Docker and Kubernetes.
 
@@ -23,7 +23,7 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 * Section 16 - Deep dive on Helm
 * Section 17 - Server-side service discovery and load balancing using Kubernetes
 * Section 18 - Deploying microservices into cloud K8s cluster
-* Section 19 - Introduction to K8s Ingress, Service Mesh (Istio) & mTLS
+* Section 19 - Introduction to Kubernetes Gateway API, Service Mesh (Istio) & mTLS
 * Section 20 - Congratulations & Thank You
 
 ## Pre-requisite for the course
@@ -53,33 +53,23 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 - RabbitMQ website - https://www.rabbitmq.com
 - Hookdeck website- https://hookdeck.com
 - Spring Cloud Netflix website - https://spring.io/projects/spring-cloud-netflix
-- Spring Cloud OpenFeign - https://spring.io/projects/spring-cloud-openfeign
 - Netflix Blog - https://netflixtechblog.com/netflix-oss-and-spring-boot-coming-full-circle-4855947713a0
 - Resilience4j website - https://resilience4j.readme.io
 - Spring Cloud Gateway website - https://spring.io/projects/spring-cloud-gateway
 - Stripe RateLimitter pattern blog - https://stripe.com/blog/rate-limiters
-- Apache Benchmark website - https://httpd.apache.org
+- hey - https://github.com/rakyll/hey
 - Grafana website - https://grafana.com
-- Grafana Loki setup - https://grafana.com/docs/loki/latest/get-started/quick-start/
 - Micrometer website - https://micrometer.io
-- Prometheus website - https://prometheus.io/
-- Grafana Dashboards - https://grafana.com/grafana/dashboards/
 - OpenTelemetry website - https://opentelemetry.io/
-- OpenTelemetry automatic instrumentation - https://opentelemetry.io/docs/instrumentation/java/automatic/
 - Keycloak website - https://www.keycloak.org/
 - Apache Kafka website - https://kafka.apache.org
-- Docker compose file for Kafka - https://github.com/bitnami/containers/blob/main/bitnami/kafka/docker-compose.yml
 - Local Kubernetes Cluster with Docker Desktop - https://docs.docker.com/desktop/kubernetes/
-- Kubernetes Dashboard - https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
+- k9s website -  https://k9scli.io/
 - Helm website - https://helm.sh
 - Chocolatey website - https://chocolatey.org/
 - Spring Cloud Kubernetes website - https://spring.io/projects/spring-cloud-kubernetes
-- Spring Cloud Kubernetes Blog - https://spring.io/blog/2021/10/26/new-features-for-spring-cloud-kubernetes-in-spring-cloud-2021-0-0-m3
 - GCP website - https://cloud.google.com
 - GCP SDK installation - https://cloud.google.com/sdk/docs/install
-- Kubernetes Ingress - https://kubernetes.io/docs/concepts/services-networking/ingress/
-- Ingress Controllers - https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
-- Istio (Service mesh) - https://istio.io
 
 
 ## Maven Commands used in the course
@@ -124,11 +114,11 @@ Learn how to create enterprise and production ready Microservices with Spring, S
 | "docker run -p 8080:8080 -e KEYCLOAK_ADMIN=admin -e KEYCLOAK_ADMIN_PASSWORD=admin quay.io/keycloak/keycloak:22.0.3 start-dev" | To create Keycloak Container|
 
 
-## Apache Benchmark command used in the course
+## hey command used in the course
 
-|     Apache Benchmark command      |     Description          |
+|     hey command      |     Description          |
 | ------------- | ------------- |
-| "ab -n 10 -c 2 -v 3 http://localhost:8072/eazybank/cards/api/contact-info" | To perform load testing on API by sending 10 requests |
+| "hey -n 10 -c 2 http://localhost:8072/eazybank/cards/api/contact-info" | To perform load testing on API by sending 10 requests |
 
 ## Kubernetes Commands used in the course
 
